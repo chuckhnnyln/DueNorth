@@ -79,7 +79,7 @@ $row_cancel = mysqli_num_rows($canansw);
 $percentcancel = $row_cancel/$row_cnt;
 $percent_friendly_cancel = number_format( $percentcancel * 100, 2 ) . '%';
 
-  
+
 
 #Get the library name
 $libnames= "SELECT Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `LOC` LIKE '$loc'  ";
@@ -89,7 +89,7 @@ $libname =  $row["Name"];
 }
 
     #Stats overall in the time frame chosen
-   echo "<h1><center>SEAL Stats from $startdated to $enddated </h1></center>";
+   echo "<h1><center>DueNorth Stats from $startdated to $enddated </h1></center>";
    echo "<h1>Borrower  statistics for ".$libname."  </h1>";
    echo "Total Request Placed  ".$row_cnt." <br>";
    echo "Number of Request Filled: ".$row_fill." (".$percent_friendly_fill.")<br>";
