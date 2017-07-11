@@ -70,6 +70,7 @@ if ($pageaction ==3){
     echo "<a href='adminlib?action=4'>Would you like to search for a library?</a><br><br>";
     echo " $GETLISTCOUNTwhole  results";
     echo "<table><tr><th>Library</th><th>Alias</th><th>Phone</th><th>Participant</th><th>Suspend</th><th>System</th><th>OCLC</th><th>ILL</th><th>Action</th></tr>";
+    $rowtype=1;
     while ($row = mysqli_fetch_assoc($GETLIST)) {
       $librecnumb = $row["recnum"];
       $libname = $row["Name"];
@@ -84,8 +85,14 @@ if ($pageaction ==3){
       if($libsuspend=="0") $libsuspend="No";
       if($libparticipant =="1") $libparticipant ="Yes";
       if($libparticipant =="0") $libparticipant ="No";
-      echo " <Tr><Td>$libname</td><td>$libalias</td><td>$phone</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
-      echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+      if ($rowtype & 1 ) {
+        echo "<tr class='odd'><Td>$libname</td><td>$libalias</td><td>$phone</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+        echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+      } else {
+        echo "<tr class='even'><Td>$libname</td><td>$libalias</td><td>$phone</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+        echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+      }
+      $rowtype=$rowtype+1;
     }
     echo "</table>";
   }else{
@@ -293,12 +300,12 @@ if ($pageaction ==3){
     <?php
   }
 }else{
-  #By defualt show all libraries in a browse list
+  #By default show all libraries in a browse list
   $GETLISTSQL="SELECT * FROM `$sealLIB` ORDER BY Name Asc";
   $retval = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNTwhole = mysqli_num_rows ($retval);
   #limit 10 libraries per page
-  $rec_limit = 10;
+  $rec_limit = 25;
   $pagerow = mysqli_fetch_array($retval, MYSQLI_NUM );
   #Setting up Pagination
   $rec_count = $pagerow[0];
@@ -311,7 +318,7 @@ if ($pageaction ==3){
   }
   $left_rec = $rec_count - ($page * $rec_limit);
   $GETLISTSQL="$GETLISTSQL LIMIT $offset, $rec_limit";
-  #Get the actual 10 libraries for the page we are browsing
+  #Get the actual 25 libraries for the page we are browsing
   $GETLIST = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
   #Display the result as html for user with action
@@ -319,6 +326,7 @@ if ($pageaction ==3){
   echo "<a href='adminlib?action=4'>Would you like to search for a library?</a><br><br>";
   echo "$GETLISTCOUNTwhole results";
   echo "<table><tr><th>Library</th><th>Alias</th><th>Participant</th><th>Suspend</th><th>System</th><th>OCLC</th><th>ILL</th><th>Action</th></tr>";
+  $rowtype=1;
     while ($row = mysqli_fetch_assoc($GETLIST)) {
         $librecnumb = $row["recnum"];
         $libname = $row["Name"];
@@ -332,20 +340,26 @@ if ($pageaction ==3){
         if($libsuspend=="0") $libsuspend="No";
         if($libparticipant =="1") $libparticipant ="Yes";
         if($libparticipant =="0") $libparticipant ="No";
-        echo " <Tr><Td>$libname</td><td>$libalias</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
-        echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+        if ($rowtype & 1 ) {
+          echo "<tr class='odd'><Td>$libname</td><td>$libalias</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+          echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+        } else {
+          echo "<tr class='even'><Td>$libname</td><td>$libalias</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+          echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+        }
+        $rowtype = $rowtype + 1;
      }
   echo "</table>";
   #Show pagination links under the data that has been displayed
    if(( $page > 0 ) && (($offset +  $rec_limit)<$GETLISTCOUNTwhole)){
      $last = $page - 2;
-     echo "<a href='adminlib?page=$last\'>Last 10 Records</a> |";
-     echo "<a href='adminlib?page=$page\'>Next 10 Records</a>";
+     echo "<a href='adminlib?page=$last\'>Last 25 Records</a> |";
+     echo "<a href='adminlib?page=$page\'>Next 25 Records</a>";
    }else if (( $page == 0 ) && ( $GETLISTCOUNTwhole  > $rec_limit )){
-     echo "<a href='adminlib?page=$page\'>Next 10 Records</a>";
+     echo "<a href='adminlib?page=$page\'>Next 25 Records</a>";
    }else if ($GETLISTCOUNTwhole > $rec_limit){
      $last = $page - 2;
-    echo "<a href='adminlib?page=$last\'>Last 10 Records</a>";
+    echo "<a href='adminlib?page=$last\'>Last 25 Records</a>";
   }
 }
 ?>

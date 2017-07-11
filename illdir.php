@@ -1,7 +1,7 @@
 <?php
 ###illdir.php####
 
-#####Connect to database
+#Connect to database
 require '../seal_script/seal_db.inc';
 $db = mysqli_connect($dbhost, $dbuser, $dbpass);
 mysqli_select_db($db,$dbname);
