@@ -43,6 +43,9 @@ $SUNYPLA="SUNY Plattsburgh";
 $JEFCC="Jefferson Community College";
 $NCCC="North Country Community College";
 
+#OCLC
+$CLARKSON="Clarkson University";
+
 #Get the IDs needed for curl command
 $jession= $_GET['jsessionid'];
 $windowid= $_GET['windowid'];
@@ -191,15 +194,15 @@ $reqserverurl='https://duenorth.indexdata.com/service-proxy/?command=record\\&wi
 $cmd= "curl -b JSESSIONID=$jession $reqserverurl$windowid\\&id=". urlencode($idc);
 
 #put in curl command in as html comment for development
-#echo "<!-- my cmd is  $cmd \n-->";
+echo "<!-- my cmd is  $cmd \n-->";
 
 #Run the CURL to get XML data
 $output = shell_exec($cmd);
 
 #put xml in html src for development
-#echo "<!-- \n";
-#print_r ($output);
-#echo "\n-->\n\n";
+echo "<!-- \n";
+print_r ($output);
+echo "\n-->\n\n";
 
 #Pull the information of the person making the request from Drupal users
 global $user;   // load the user entity so to pick the field from.
@@ -348,7 +351,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
       echo"<option value='". $schoolloc .":".$libname.":".$libsystemq.":".$schooltxtavail.":".$schoolcall1.":".$mylocalcallLocation.":".$destemail.":".$destloc."'>Library:<strong>".$libname."</strong>   Availability: $schooltxtavail Call Number:$schoolcall1  </option>";
       }
     }#End looping through each of the school locations
-  } elseif ($locname == $NCLS){
+  } elseif (($locname == $NCLS) || ($locname == $PSCOLL)) {
     foreach ($location->holdings->holding as $holding){
       $mylocholding=$locname;
       $mylocalcallNumber=$holding->callNumber;
@@ -425,7 +428,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
       } else {
         $available=0;
       }
-		$mylocalAvailability=str_replace("Available","UNKNOWN",$mylocalAvailability);
+		  #$mylocalAvailability=str_replace("Available","UNKNOWN",$mylocalAvailability);
       #Translate library alias to a real name for patron
       $realname=getlibname($mylocalcallLocation);
       $libname=$realname[0];
@@ -440,6 +443,16 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
       $suspendstatus=checklib_suspend($libname);
       #Check if they will loan that item type
       $itemtypecheck = checkitype ($mylocalcallLocation,$itemtype);
+      #Dianostic information for development
+      #echo "<!-- \n";
+      #echo "libname: $libname \n";
+      #echo "libsystemq: $libsystemq \n";
+      #echo "suspendstatus: $suspendstatus \n";
+      #echo "itemtypecheck: $itemtypecheck \n";
+      #echo "sealstatus: $sealstatus \n";
+      #echo "destemail: $destemail \n";
+      #echo "available: $available \n";
+      #echo "\n-->\n\n";
       #Show this option to patron if SEAL Status is 1 and Suspendstatus is 0
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1) ) {
         $loccount=$loccount+1;
