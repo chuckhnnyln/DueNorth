@@ -95,7 +95,7 @@ mysqli_select_db($db,$dbname);
      <?php if($system=="SLL"){ $system="St. Lawrence-Lewis BOCES School Library System";}?>
     <B>Library System:</b> <?php echo $system?><br>
       <br><br>
-      <B>Items willing to loan in SEAL</b><br>
+      <B>Items willing to loan in DueNorth</b><br>
         <table>
         <tr>
         <td><b>Print Book</b><td>
