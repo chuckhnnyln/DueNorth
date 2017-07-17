@@ -98,8 +98,8 @@ if (strcmp($libsystem,'CVES')==0){
    }
 
     #Stats overall in the time frame chosen
-    echo "<h1><center>DueNorth Stats from $startdated to $enddated </h1></center>";
-    echo "<h1>Library System ".$libsystemtxt." </h1>";
+    echo "<h1>DueNorth Stats from $startdated to $enddated </h1>";
+    echo "<br><h3>Library System ".$libsystemtxt." </h3>";
     echo "Total Request ".$row_cnt." <br>";
     echo "Number of Request Filled: ".$row_fill." (".$percent_friendly_fill.")<br>";
     echo "Number of Request Not Filled: ".$row_notfill." (".$percent_friendly_notfill.")<br>";
@@ -292,14 +292,13 @@ if (strcmp($dessysvar,'CVES')==0){
     }
   }else{
       ?>
-     <h2>Enter the data range you will like to run DueNorth stats usage:</h2>
+     <h3>Enter your desired date range:</h3>
      <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
      Start Date:
      <input id="datepicker" name="startdate"/>
      End Date:
      <input id="datepicker2" name="enddate"/>
-     <br><br>
-     <B>Requesting Library System</b><select name="system">
+     <br><br>Requesting Library System: <select name="system">
                     <option value="">All</option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
@@ -318,7 +317,7 @@ if (strcmp($dessysvar,'CVES')==0){
     $libnames= "SELECT loc,Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `participant`=1 order by `Name` ";
     $libnameq =   mysqli_query($db, $libnames);
     echo "<form action='/libstats'   method='post2' >";
-    echo "<h2>Generate borrowing stats for a specific Library:</h2><br>";
+    echo "<h3>Generate borrowing stats for a specific library:</h3><br>";
     echo "<select name=libname>";
     while($row = $libnameq->fetch_assoc()) {
       $libname =  $row["Name"];
@@ -332,7 +331,7 @@ if (strcmp($dessysvar,'CVES')==0){
     $libnames= "SELECT loc,Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `participant`=1 order by `Name` ";
     $libnameq =   mysqli_query($db, $libnames);
     echo "<form action='/liblenderstat'   method='post2' >";
-    echo "<h2>Generate lending stats for a specific Library:</h2><br>";
+    echo "<h3>Generate lending stats for a specific library:</h3><br>";
     echo "<select name=libname>";
     while($row = $libnameq->fetch_assoc()) {
       $libname =  $row["Name"];
@@ -344,7 +343,7 @@ if (strcmp($dessysvar,'CVES')==0){
     ?>
     <hr>
     <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h2>Generate list of expired requests:</h2><br>
+    <h3>Generate list of expired requests:</h3><br>
      Start Date:
      <input id="expdatepicker" name="startdate"/>
      End Date:
@@ -354,7 +353,7 @@ if (strcmp($dessysvar,'CVES')==0){
     </form>
     <hr>
     <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h2>Generate list of top 10 libraries making requests:</h2><br>
+    <h3>Generate list of top 10 libraries making requests:</h3><br>
     Start Date:
     <input id="top10datepicker" name="startdate"/>
     End Date:
@@ -364,7 +363,7 @@ if (strcmp($dessysvar,'CVES')==0){
     </form>
 	  <hr>
     <form action="duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h2>Generate list of top 10 libraries filling requests:</h2><br>
+    <h3>Generate list of top 10 libraries filling requests:</h3><br>
     Start Date:
     <input id="top10fdatepicker" name="startdate"/>
     End Date:

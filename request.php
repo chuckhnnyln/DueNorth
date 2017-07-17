@@ -495,7 +495,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
           echo"<option value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc."'>Library:<strong>".$libname."</strong> Availability: $mylocalAvailability  Call Number: $mylocalcallNumber</option>";
         }
       } #End processing destination library that is active in SEAL
-    } #This end the foreach statement in the last else for catalogs
+    } #This end the for each statement in the last else for catalogs
   }
 }#This is the end of the for loop for locations
 ##End of looking at holdings##

@@ -89,8 +89,8 @@ $libname =  $row["Name"];
 }
 
     #Stats overall in the time frame chosen
-   echo "<h1><center>DueNorth Stats from $startdated to $enddated </h1></center>";
-   echo "<h1>Borrower  statistics for ".$libname."  </h1>";
+   echo "<h1>DueNorth Stats from $startdated to $enddated </h1>";
+   echo "<br><h3>Borrower statistics for ".$libname."  </h3>";
    echo "Total Request Placed  ".$row_cnt." <br>";
    echo "Number of Request Filled: ".$row_fill." (".$percent_friendly_fill.")<br>";
    echo "Number of Request Not Filled: ".$row_notfill." (".$percent_friendly_notfill.")<br>";
@@ -101,7 +101,7 @@ $libname =  $row["Name"];
 
 
 
-    echo "<h1>Break down of requests</h1>";
+    echo "<h3>Break down of requests</h3>";
    #Find which systems they sent request to
    $destsystem=" SELECT distinct (`DestSystem` )  FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  ";
    $destsystemq = mysqli_query($db, $destsystem);
@@ -227,7 +227,7 @@ if (isset($_GET['loc'])){  $loc = $_GET['loc'];  }else{$loc='null';}
 
     $libname=$_REQUEST["libname"];
           ?>
-     <h2>Enter your desired date range:</h2>
+     <h3>Enter your desired date range:</h3>
 
 
      <form action="/libstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">

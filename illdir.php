@@ -111,11 +111,14 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     echo "LOC Code :<strong> $loc</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
+    echo "<button onclick='showHide($count)'>Show loaning options</button>";
+    echo "<span class='loadoptions' id='showhide-$count' style='display: none'>";
     echo "Loaning Books: <strong>$book</strong><br>";
     echo "Loaning Journals or Articles: <strong>$journal</strong><br>";
     echo "Loaning Audio/Video: <strong>$av</strong><br>";
     echo "Loaning Reference: <strong>$reference</strong><br>";
-    echo "Loaning E-Books: <strong>$ebook</strong><br>";
+    echo "Loaning E-Books: <strong>$ebook</strong><br><br>";
+    echo "</span>";
     echo "</td>";
     if ($count++ % 2 == 0){
       echo "</tr><tr>";
@@ -220,11 +223,14 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     echo "LOC Code :<strong> $loc</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
+    echo "<button onclick='showHide($count)'>Show loaning options</button>";
+    echo "<span class='loadoptions' id='showhide-$count' style='display: none'>";
     echo "Loaning Books: <strong>$book</strong><br>";
     echo "Loaning Journals or Articles: <strong>$journal</strong><br>";
     echo "Loaning Audio/Video: <strong>$av</strong><br>";
     echo "Loaning Reference: <strong>$reference</strong><br>";
-    echo "Loaning E-Books: <strong>$ebook</strong><br>";
+    echo "Loaning E-Books: <strong>$ebook</strong><br><br>";
+    echo "</div>";
     echo "</td>";
     if ($count++ % 2 == 0){
       echo "</tr><tr>";
