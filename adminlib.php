@@ -97,7 +97,7 @@ if ($pageaction ==3){
     echo "</table>";
   }else{
     #Preset form for search criteria?>
-    <h2>Enter the criteria you want to search:</h2>
+    <h3>Enter the criteria you want to search:</h3>
     <form action="/adminlib?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
     <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
     <B>Library Alias:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libalias"><br>
@@ -149,6 +149,7 @@ if ($pageaction ==3){
   }else{
     ?>
     <form action="/adminlib?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
+    <h3>Add a Library</h3>
     <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
     <B>Library Alias:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libalias"><br>
     <B>Library ILL Email:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libemail"><br>
@@ -168,8 +169,8 @@ if ($pageaction ==3){
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
-      <B>Items Willing to loan in SEAL</b><br>
+<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option></select><br>
+      <B>Items Willing to loan in DueNorth</b><br>
         <ul>
         <li><b>Print Book</b>
           <input type="radio" name="book" value="1" checked> Yes
@@ -189,7 +190,7 @@ if ($pageaction ==3){
         </li>
         <li><b>Electronic Book</b>
           <input type="radio" name="ebook" value="1" > Yes
-          <input type="radio" name="ebook" value="0" checked>> No <br>
+          <input type="radio" name="ebook" value="0" checked> No <br>
         </li>
       </ul>
       <br>
@@ -255,9 +256,9 @@ if ($pageaction ==3){
     <B>City State Zip:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address3" value="<?php echo $address3?>"><br>
     <B>OCLC Symbol:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="oclc" value="<?php echo $oclc?>"><br>
     <B>LOC Location:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc" value="<?php echo $loc?>"><br>
-    <B>Library ILL participant</b><select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
-    <B>Suspend ILL</b><select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
-    <B>Library System</b><select name="system">
+    <B>Library ILL participant</b> <select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
+    <B>Suspend ILL</b> <select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
+    <B>Library System</b> <select name="system">
 <option value = "CVES" <?php if($system=="CVES") echo "selected=\"selected\""; ?>>Champlain Valley Education Services School Library System</option>
 <option value = "CEFL" <?php if($system=="CEFL") echo "selected=\"selected\""; ?>>Clinton Essex Franklin Library System</option>
 <option value = "FEH" <?php if($system=="FEH") echo "selected=\"selected\""; ?>>Franklin-Essex-Hamilton BOCES School Library System</option>
@@ -267,7 +268,7 @@ if ($pageaction ==3){
 <option value = "OSW" <?php if($system=="OSW") echo "selected=\"selected\""; ?>>Oswego County School Library System at CiTi</option>
 <option value = "SLL" <?php if($system=="SLL") echo "selected=\"selected\""; ?>>St. Lawrence-Lewis BOCES School Library System</option>
     </select><br><br>
-    <B>Items willing to loan in SEAL</b><br>
+    <B>Items willing to loan in DueNorth</b><br>
       <table>
       <tr>
       <td><b>Print Book</b><td>

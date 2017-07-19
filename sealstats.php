@@ -311,13 +311,13 @@ if (strcmp($dessysvar,'CVES')==0){
      <input type="hidden" name="stattype" value="wholesystem">
      <input type="submit" value="Submit">
     </form>
-    <br><hr>
+    <br>
     <?php
     #Generate the drop down for borrower stats
     $libnames= "SELECT loc,Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `participant`=1 order by `Name` ";
     $libnameq =   mysqli_query($db, $libnames);
     echo "<form action='/libstats'   method='post2' >";
-    echo "<h3>Generate borrowing stats for a specific library:</h3><br>";
+    echo "<h3>Generate borrowing stats for a specific library:</h3>";
     echo "<select name=libname>";
     while($row = $libnameq->fetch_assoc()) {
       $libname =  $row["Name"];
@@ -326,12 +326,11 @@ if (strcmp($dessysvar,'CVES')==0){
     }
     echo "<input type='submit' value='Submit'>";
     echo "</select></form>";
-    echo "<hr>";
     #Generating the links for borrowing stats
     $libnames= "SELECT loc,Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `participant`=1 order by `Name` ";
     $libnameq =   mysqli_query($db, $libnames);
     echo "<form action='/liblenderstat'   method='post2' >";
-    echo "<h3>Generate lending stats for a specific library:</h3><br>";
+    echo "<h3>Generate lending stats for a specific library:</h3>";
     echo "<select name=libname>";
     while($row = $libnameq->fetch_assoc()) {
       $libname =  $row["Name"];
@@ -341,9 +340,8 @@ if (strcmp($dessysvar,'CVES')==0){
     echo "<input type='submit' value='Submit'>";
     echo "</select></form>";
     ?>
-    <hr>
     <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h3>Generate list of expired requests:</h3><br>
+    <h3>Generate list of expired requests:</h3>
      Start Date:
      <input id="expdatepicker" name="startdate"/>
      End Date:
@@ -351,9 +349,8 @@ if (strcmp($dessysvar,'CVES')==0){
      <input type="hidden" name="stattype" value="expirestats">
      <input type="submit" value="Submit">
     </form>
-    <hr>
     <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h3>Generate list of top 10 libraries making requests:</h3><br>
+    <h3>Generate list of top 10 libraries making requests:</h3>
     Start Date:
     <input id="top10datepicker" name="startdate"/>
     End Date:
@@ -361,9 +358,8 @@ if (strcmp($dessysvar,'CVES')==0){
     <input type="hidden" name="stattype" value="top10stats">
     <input type="submit" value="Submit">
     </form>
-	  <hr>
     <form action="duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h3>Generate list of top 10 libraries filling requests:</h3><br>
+    <h3>Generate list of top 10 libraries filling requests:</h3>
     Start Date:
     <input id="top10fdatepicker" name="startdate"/>
     End Date:

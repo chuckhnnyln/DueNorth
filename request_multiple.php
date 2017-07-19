@@ -298,9 +298,8 @@ echo "<input type='hidden' name='issn' value= ' ".$issn ." '>";
 #$destemail="chuckh@nnyln.org";
 
 ##This will loop through all the libraries that have title and see if they should be in drop down to a make a request
-echo "Playing with input types for multi-request feature... this may be broken. -Chuck";
-echo "<select required name='destination'>";
-echo "<option value=''> Please Select a library</option>";
+echo "Please select the libraries you would like to request from. A new request will be made for each library selected. <br><br>";
+
 #This variable is used to count destination libraries available to make the request
 $loccount='1';
 foreach ($records->location as $location)  {
@@ -368,7 +367,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
       $loccount=$loccount+1;
 			$mylocalcallLocation='';
       $schoolcall1= preg_replace('/[:]/', ' ' , $schoolcall1);
-      echo"<option value='". $schoolloc .":".$libname.":".$libsystemq.":".$schooltxtavail.":".$schoolcall1.":".$mylocalcallLocation.":".$destemail.":".$destloc."'>Library:<strong>".$libname."</strong>   Availability: $schooltxtavail Call Number:$schoolcall1  </option>";
+      echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $schoolloc .":".$libname.":".$libsystemq.":".$schooltxtavail.":".$schoolcall1.":".$mylocalcallLocation.":".$destemail.":".$destloc."'><strong>".$libname."</strong>, Availability: $schooltxtavail, Call Number:$schoolcall1  </br>";
       }
     }#End looping through each of the school locations
   } elseif (($locname == $NCLS) || ($locname == $PSCOLL)) {
@@ -406,7 +405,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         }
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
         $loccount=$loccount+1;
-        echo"<option value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '>Library:<strong>".$libname."</strong>   Availability: $mylocalAvailability  Call Number: $mylocalcallNumber</option> ";
+        echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br> ";
       }
     } # END NCLS
   } elseif ($locname == $SLU){
@@ -442,7 +441,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         }
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
         $loccount=$loccount+1;
-        echo"<option value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '>Library:<strong>".$libname."</strong>   Availability: $mylocalAvailability  Call Number: $mylocalcallNumber</option> ";
+        echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br> ";
       }
     }
   } elseif ($locname == $CEFL){
@@ -493,7 +492,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         }
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
         $loccount=$loccount+1;
-        echo"<option value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '>Library:<strong>".$libname."</strong>   Availability: $mylocalAvailability  Call Number: $mylocalcallNumber</option> ";
+        echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br> ";
       }
   } # END CEFL
 } else {
@@ -529,7 +528,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         #If they are not filtering own system show this library as a destination
         if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
           $loccount=$loccount+1;
-          echo"<option value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc."'>Library:<strong>".$libname."</strong> Availability: $mylocalAvailability  Call Number: $mylocalcallNumber</option>";
+          echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc."'><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br>";
         }
       } #End processing destination library that is active in SEAL
     } #This end the for each statement in the last else for catalogs
@@ -539,7 +538,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
 echo "</select>";
 #If we have locations to route to show submit
 if ($loccount>0){
-  echo "<input type=Submit value=Submit> ";
+  echo "<input type=Submit value=Submit onClick='failcheck()'> ";
   #If we have no locations don't show submit and display error
 } else {
   echo "<br><br>Sorry, no available library to route your request at this time.  <a href='https://duenorth.nnyln.org'>Would you like to try another search ?</a>";
