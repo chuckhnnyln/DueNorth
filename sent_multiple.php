@@ -169,9 +169,9 @@ if (mysqli_query($db, $sql)) {
   #SEND EMAIL to Detestation Library with DKIM Signature
   $email_to = implode(',', $destemailarray);
   $headers =
-  'MIME-Version: 1.0
-  From: "DueNorth" <duenorth@nnyln.org>
-  Content-type: text/html; charset=utf8';
+'MIME-Version: 1.0
+From: "DueNorth" <duenorth@nnyln.org>
+Content-type: text/html; charset=utf8';
 
   $messagedest = preg_replace('/(?<!\r)\n/', "\r\n", $messagedest);
   $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
@@ -179,10 +179,10 @@ if (mysqli_query($db, $sql)) {
 
   #SEND a copy of EMAIL to requester with DKIM sig
   $headers =
-  'MIME-Version: 1.0
-  From: "DueNorth" <duenorth@nnyln.org>
-  Content-type: text/html; charset=utf8';
-  #DKIM Signature to destination
+'MIME-Version: 1.0
+From: "DueNorth" <duenorth@nnyln.org>
+Content-type: text/html; charset=utf8';
+
   $messagereq = preg_replace('/(?<!\r)\n/', "\r\n", $messagereq);
   $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
   mail($email, $subject, $messagereq, $headers);

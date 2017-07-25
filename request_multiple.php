@@ -298,7 +298,7 @@ echo "<input type='hidden' name='issn' value= ' ".$issn ." '>";
 #$destemail="chuckh@nnyln.org";
 
 ##This will loop through all the libraries that have title and see if they should be in drop down to a make a request
-echo "Please select the libraries you would like to request from. A new request will be made for each library selected. <br><br>";
+echo "Please select the library you would like to request from. Libraries in need of multiple copies may select more than one library.<br><br>";
 
 #This variable is used to count destination libraries available to make the request
 $loccount='1';
@@ -308,6 +308,7 @@ foreach ($records->location as $location)  {
 $locname = $location['name'];
 
 if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($locname == $FEH)  ||   ($locname == $CVES)) {
+$systemtype="OPALS";
   #Pull the checksum for the location
   $schoolchecksum=$location['checksum'];
   #redo the curl statement to includes the checksum
@@ -338,18 +339,17 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         $filterstatus=0;
       }
       #Diagnostic information for development
-      #echo "<!-- \n";
-      #echo "libname: $libname \n";
-      #echo "libsystemq: $libsystemq \n";
-      #$test=$field_home_library_system[0]['value'];
-      #echo "home_library_system: $test \n";
-      #echo "suspendstatus: $suspendstatus \n";
-      #echo "itemtypecheck: $itemtypecheck \n";
-      #echo "sealstatus: $sealstatus \n";
-      #echo "destemail: $destemail \n";
-      #echo "available: $available \n";
-      #echo "filterstatus: $filterstatus \n";
-      #echo "\n-->\n\n";
+      echo "<!-- \n";
+      echo "systemtype: $systemtype \n";
+      echo "libname: $libname \n";
+      echo "libsystemq: $libsystemq \n";
+      echo "suspendstatus: $suspendstatus (0)\n";
+      echo "itemtypecheck: $itemtypecheck (1)\n";
+      echo "sealstatus: $sealstatus (1)\n";
+      echo "destemail: $destemail \n";
+      echo "available: $available \n";
+      echo "filterstatus: $filterstatus (0)\n";
+      echo "\n-->\n\n";
     if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($filterstatus==0)) {
       #only process a library if they particate in seal and have a lending email
       #Translates values to txt for patron on item  status
@@ -371,6 +371,7 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
       }
     }#End looping through each of the school locations
   } elseif (($locname == $NCLS) || ($locname == $PSCOLL)) {
+    $systemtype="SirsiDynix";
     foreach ($location->holdings->holding as $holding){
       $mylocholding=$locname;
       $mylocalcallNumber=$holding->callNumber;
@@ -403,12 +404,25 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         } else {
           $filterstatus=0;
         }
+        #Diagnostic information for development
+        echo "<!-- \n";
+        echo "systemtype: $systemtype \n";
+        echo "libname: $libname \n";
+        echo "libsystemq: $libsystemq \n";
+        echo "suspendstatus: $suspendstatus (0)\n";
+        echo "itemtypecheck: $itemtypecheck (1)\n";
+        echo "sealstatus: $sealstatus (1)\n";
+        echo "destemail: $destemail \n";
+        echo "available: $available (1)\n";
+        echo "filterstatus: $filterstatus (0)\n";
+        echo "\n-->\n\n";
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
         $loccount=$loccount+1;
         echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br> ";
       }
     } # END NCLS
   } elseif ($locname == $SLU){
+    $systemtype="Innovative";
     foreach ($location->holdings->holding as $holding){
       $mylocholding=$locname;
       $mylocalcallNumber=$holding->callNumber;
@@ -439,12 +453,25 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         } else {
           $filterstatus=0;
         }
+        #Diagnostic information for development
+        echo "<!-- \n";
+        echo "systemtype: $systemtype \n";
+        echo "libname: $libname \n";
+        echo "libsystemq: $libsystemq \n";
+        echo "suspendstatus: $suspendstatus (0)\n";
+        echo "itemtypecheck: $itemtypecheck (1)\n";
+        echo "sealstatus: $sealstatus (1)\n";
+        echo "destemail: $destemail \n";
+        echo "available: $available (1)\n";
+        echo "filterstatus: $filterstatus (0)\n";
+        echo "\n-->\n\n";
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
         $loccount=$loccount+1;
         echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br> ";
       }
     }
   } elseif ($locname == $CEFL){
+    $systemtype="Horizon";
     foreach ($location->holdings->holding as $holding){
       $mylocholding=$locname;
       $mylocalcallNumber=$holding->callNumber;
@@ -474,28 +501,31 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
       $suspendstatus=checklib_suspend($libname);
       #Check if they will loan that item type
       $itemtypecheck = checkitype ($mylocalcallLocation,$itemtype);
-      #Dianostic information for development
-      #echo "<!-- \n";
-      #echo "libname: $libname \n";
-      #echo "libsystemq: $libsystemq \n";
-      #echo "suspendstatus: $suspendstatus \n";
-      #echo "itemtypecheck: $itemtypecheck \n";
-      #echo "sealstatus: $sealstatus \n";
-      #echo "destemail: $destemail \n";
-      #echo "available: $available \n";
-      #echo "\n-->\n\n";
       #Show this option to patron if SEAL Status is 1 and Suspendstatus is 0
       if ($field_filter_own_system[0]['value']>0){
         $filterstatus=checkfilter ($libsystemq,$field_home_library_system[0]['value']);
         } else {
           $filterstatus=0;
         }
+        #Dianostic information for development
+        echo "<!-- \n";
+        echo "systemtype: $systemtype \n";
+        echo "libname: $libname \n";
+        echo "libsystemq: $libsystemq \n";
+        echo "suspendstatus: $suspendstatus (0)\n";
+        echo "itemtypecheck: $itemtypecheck (1)\n";
+        echo "sealstatus: $sealstatus (1)\n";
+        echo "destemail: $destemail \n";
+        echo "available: $available (1)\n";
+        echo "filterstatus: $filterstatus (0)\n";
+        echo "\n-->\n\n";
       if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
         $loccount=$loccount+1;
         echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc." '><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br> ";
       }
   } # END CEFL
 } else {
+  $systemtype="Generic Handling";
   foreach ($location->holdings->holding as $holding){
     $mylocholding=$holding->localLocation;
     $mylocalcallNumber=$holding->callNumber;
@@ -525,8 +555,22 @@ if (($locname == $OSW) || ($locname == $JLHO)  ||   ($locname == $SLL)  ||   ($l
         } else {
           $filterstatus=0;
         }
+      $mylocalAvailability = str_replace(" ","", $mylocalAvailability);
+      $mylocalAvailability = str_replace("\n","", $mylocalAvailability);
+        #Dianostic information for development
+        echo "<!-- \n";
+        echo "systemtype: $systemtype \n";
+        echo "libname: $libname \n";
+        echo "libsystemq: $libsystemq \n";
+        echo "suspendstatus: $suspendstatus (0)\n";
+        echo "itemtypecheck: $itemtypecheck (1)\n";
+        echo "sealstatus: $sealstatus (1)\n";
+        echo "destemail: $destemail \n";
+        echo "mylocalAvailability: ~$mylocalAvailability~ (Available)\n";
+        echo "filterstatus: $filterstatus (0)\n";
+        echo "\n-->\n\n";
         #If they are not filtering own system show this library as a destination
-        if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($available==1)&&($filterstatus==0) ) {
+        if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($filterstatus==0)&&($mylocalAvailability=="Available") ) {
           $loccount=$loccount+1;
           echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc."'><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br>";
         }

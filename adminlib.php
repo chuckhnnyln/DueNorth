@@ -66,8 +66,9 @@ if ($pageaction ==3){
     $rec_count = $row[0];
     $GETLIST = mysqli_query($db, $GETLISTSQL1);
     $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
-    echo "<a href='adminlib?action=1'>Would you like to add a library?</a><br>";
-    echo "<a href='adminlib?action=4'>Would you like to search for a library?</a><br><br>";
+    echo "<a href='adminlib?action=1'>Add a library</a><br>";
+    echo "<a href='adminlib?action=4'>Search for a library</a><br>";
+    echo "<a href='adminlib?action=5'>Mass suspend or activate library lending</a><br><br>";
     echo " $GETLISTCOUNTwhole  results";
     echo "<table><tr><th>Library</th><th>Alias</th><th>Phone</th><th>Participant</th><th>Suspend</th><th>System</th><th>OCLC</th><th>ILL</th><th>Action</th></tr>";
     $rowtype=1;
@@ -300,6 +301,27 @@ if ($pageaction ==3){
     </form>
     <?php
   }
+}elseif($pageaction ==5){
+  #Suspend and Unsuspend en masse
+  ?>
+  <p>Please select the action you wish to take and the library system to act upon.</p>
+  <form action="/status-confirmation" method="post">
+  <input type="radio" name="task" value="suspend">Suspend lending<br>
+  <input type="radio" name="task" value="activate" checked="checked">Activate lending<br><br>
+  <b>Library System </b><select name="system">
+  <option value = "none">Select a system</option>
+  <option value = "CVES">Champlain Valley Education Services School Library System</option>
+  <option value = "CEFL">Clinton Essex Franklin Library System</option>
+  <option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
+  <option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+  <option value = "NCLS">North Country Library System</option>
+  <option value = "NNYLN">Northern New York Library Network</option>
+  <option value = "OSW">Oswego County School Library System at CiTi</option>
+  <option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option></select><br>
+  <br><br>
+  <input type="submit" value="Submit">
+  </form>
+  <?php
 }else{
   #By default show all libraries in a browse list
   $GETLISTSQL="SELECT * FROM `$sealLIB` ORDER BY Name Asc";
@@ -323,8 +345,9 @@ if ($pageaction ==3){
   $GETLIST = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
   #Display the result as html for user with action
-  echo "<a href='adminlib?action=1'>Would you like to add a library?</a><br>";
-  echo "<a href='adminlib?action=4'>Would you like to search for a library?</a><br><br>";
+  echo "<a href='adminlib?action=1'>Add a library</a><br>";
+  echo "<a href='adminlib?action=4'>Search for a library</a><br>";
+  echo "<a href='adminlib?action=5'>Mass suspend or activate library lending</a><br><br>";
   echo "$GETLISTCOUNTwhole results";
   echo "<table><tr><th>Library</th><th>Alias</th><th>Participant</th><th>Suspend</th><th>System</th><th>OCLC</th><th>ILL</th><th>Action</th></tr>";
   $rowtype=1;
