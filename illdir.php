@@ -22,7 +22,7 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
   #Display the searched results
   $libname = mysqli_real_escape_string($db,$libname);
   $libemail = mysqli_real_escape_string($db,$libemail);
-  $GETLISTSQL="SELECT * FROM `$sealLIB` WHERE `Name` LIKE '%$libname%' and `system` LIKE '%$system%'  ORDER BY Name Asc";
+  $GETLISTSQL="SELECT * FROM `$sealLIB` WHERE `Name` LIKE '%$libname%' and `system` LIKE '%$system%' and participant = '1' ORDER BY Name Asc";
   $retval = mysqli_query ($db, $GETLISTSQL);
   $GETLISTCOUNTwhole = mysqli_num_rows ($retval);
   $rec_limit = 50;
@@ -30,7 +30,7 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
   $rec_count = $rowpage[0];
   $GETLIST = mysqli_query($db, $GETLISTSQL1);
   $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
-  echo " $GETLISTCOUNTwhole  results";
+  #echo " $GETLISTCOUNTwhole  results";
   if( isset($_GET{'page'} ) ){
     $page = $_GET{'page'} + 1;
     $offset = $rec_limit * $page ;
@@ -44,10 +44,10 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
   $GETLIST = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
   ?>
-  <p>Search the directory:</p>
+  <h3>Search the directory</h3>
   <form action="/illdir<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
   <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
-  <B>Library System</b><select name="system">
+  <B>Library System</b> <select name="system">
     <option value=""></option>
     <option value = "CVES">Champlain Valley Education Services School Library System</option>
     <option value = "CEFL">Clinton Essex Franklin Library System</option>
@@ -157,10 +157,10 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
   $GETLIST = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
   ?>
-  <p>Search the directory:</p>
+  <h3>Search the directory</h3>
   <form action="/illdir<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
   <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
-  <B>Library System</b><select name="system">
+  <B>Library System</b> <select name="system">
     <option value=""></option>
     <option value = "CVES">Champlain Valley Education Services School Library System</option>
     <option value = "CEFL">Clinton Essex Franklin Library System</option>

@@ -103,9 +103,9 @@ if ($pageaction ==3){
     <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
     <B>Library Alias:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libalias"><br>
     <B>Library ILL Email:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libemail"><br>
-    <B>Library ILL participant</b><select name="participant"><option value=""></option> <option value="1">Yes</option><option value="0">No</option></select><br>
-    <B>Suspend ILL</b><select name="suspend"><option value=""></option><option value="0">No</option><option value="1">Yes</option></select><br>
-    <B>Library System</b><select name="system">
+    <B>Library ILL participant </b><select name="participant"><option value=""></option> <option value="1">Yes</option><option value="0">No</option></select><br>
+    <B>Suspend ILL </b><select name="suspend"><option value=""></option><option value="0">No</option><option value="1">Yes</option></select><br>
+    <B>Library System </b><select name="system">
       <option value=""></option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
@@ -160,9 +160,10 @@ if ($pageaction ==3){
     <B>City State Zip:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address3"><br>
     <B>OCLC Symbol:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="oclc"><br>
     <B>ILL Code:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc"><br>
-    <B>Library ILL participant</b><select name="participant">  <option value="1">Yes</option><option value="0">No</option></select><br>
-    <B>Suspend ILL</b><select name="suspend">  <option value="0">No</option><option value="1">Yes</option></select><br>
-    <B>Library System</b><select name="system">
+    <B>Library ILL participant </b><select name="participant">  <option value="1">Yes</option><option value="0">No</option></select><br>
+    <B>Suspend ILL </b><select name="suspend">  <option value="0">No</option><option value="1">Yes</option></select><br>
+    <B>Library System </b><select name="system">
+<option value=""></option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
 <option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
@@ -257,9 +258,9 @@ if ($pageaction ==3){
     <B>City State Zip:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address3" value="<?php echo $address3?>"><br>
     <B>OCLC Symbol:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="oclc" value="<?php echo $oclc?>"><br>
     <B>LOC Location:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc" value="<?php echo $loc?>"><br>
-    <B>Library ILL participant</b> <select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
-    <B>Suspend ILL</b> <select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
-    <B>Library System</b> <select name="system">
+    <B>Library ILL participant </b> <select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
+    <B>Suspend ILL </b> <select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
+    <B>Library System </b> <select name="system">
 <option value = "CVES" <?php if($system=="CVES") echo "selected=\"selected\""; ?>>Champlain Valley Education Services School Library System</option>
 <option value = "CEFL" <?php if($system=="CEFL") echo "selected=\"selected\""; ?>>Clinton Essex Franklin Library System</option>
 <option value = "FEH" <?php if($system=="FEH") echo "selected=\"selected\""; ?>>Franklin-Essex-Hamilton BOCES School Library System</option>

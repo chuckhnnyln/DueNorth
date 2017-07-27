@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
                                      "<br><br>Please email <b>".$destemail_to."</b> for future communications regarding this request ";
                 #######Setup php email headers
                 $to=$requesterEMAIL;
-                $subject = "ILL Request Filled ILL# $reqnumb  ";
+                $subject = "FILLED ILL Request ILL# $reqnumb  ";
                 #####SEND requester an email to let them know the request will be filled
                 $message = preg_replace('/(?<!\r)\n/', "\r\n", $message);
                 $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
                 $message = "Your ILL request $reqnumb for $title can not be filled by $destlib.<br> <br>$respnote<br><br> <a href='https://duenorth.nnyln.org'>Would you like to try a different library</a>?";
                #######Setup php email headers
                 $to=$requesterEMAIL;
-                $subject = "ILL Request Not Filled ILL# $reqnumb ";
+                $subject = "UNFILLED ILL Request ILL# $reqnumb ";
                 #####SEND requester an email to let them know the request will be filled
                 $message = preg_replace('/(?<!\r)\n/', "\r\n", $message);
                 $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
            <?php
        ####Generate an error if database can't be updated#####
        }else{
-          echo "Unable to record answer for ILL request $reqnumb please call SENYLRC to report this error";
+          echo "Unable to record answer for ILL request $reqnumb please call NNYLN to report this error";
        }
   ###End if statement of yes or no#####
   }

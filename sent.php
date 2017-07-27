@@ -14,7 +14,7 @@ $wphone=$_REQUEST["wphone"];
 if (isset($_REQUEST['reqLOCcode'])) $reqLOCcode = $_REQUEST['reqLOCcode'];
 if (isset($_REQUEST['bibauthor'])) $author = $_REQUEST['bibauthor'];
 if (isset($_REQUEST['bibtitle'])) $title = $_REQUEST['bibtitle'];
-if (isset($_REQUEST['destination'])) $destination = $_REQUEST['destination'];
+#if (isset($_REQUEST['destination'])) $destination = $_REQUEST['destination'];
 if (isset($_REQUEST['bibtype'])) $itype = $_REQUEST['bibtype'];
 if (isset($_REQUEST['pubdate'])) $pubdate = $_REQUEST['pubdate'];
 if (isset($_REQUEST['isbn'])) $isbn = $_REQUEST['isbn'];
@@ -46,6 +46,9 @@ if($user->uid) {    // Get field value;
 $field_home_library_system =   field_get_items('user', $user_contaning_field, 'field_home_library_system');
 $reqsystem=$field_home_library_system[0]['value'];
 }
+
+foreach($_POST['destination'] as $destination) {
+  #Run this routine for each destination provided for multi-request.
 
 #Split Destination contents
 list($libcode,$library,$destsystem, $itemavail, $itemcall, $itemlocation, $destemail, $destloc) = explode(":", $destination);
@@ -102,12 +105,7 @@ if (mysqli_query($db, $sql)) {
   $illnum="$yearid-$sqlidnumb";
   $sqlupdate = "UPDATE `seal`.`SENYLRC-SEAL2-STATS` SET `illNUB` =  '$illnum' WHERE `index` = $sqlidnumb";
 
-  #This will generate the web page response
-  echo "Your ILL number is $illnum, your request has been emailed to $library for the following<br>
-  Title: $title.<br>
-  Author: $author<br>
-  Publication Date: $pubdate<br><br>
-  A copy of this request has also been emailed to the requester $fname $lname at $email " ;
+  echo "Request <b>$illnum</b> has been emailed to <b>$library.</b><br>";
   mysqli_query($db, $sqlupdate);
 
   #SETUP email
@@ -166,14 +164,14 @@ if (mysqli_query($db, $sql)) {
   Will you fill this request?  <a href='https://duenorth.nnyln.org/respond?num=$illnum&a=1' >Yes</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href='https://duenorth.nnyln.org/respond?num=$illnum&a=0' >No</a><br>";
 
   #Set email subject for request
-  $subject = "ILL Request from $inst ILL# $illnum";
+  $subject = "NEW ILL Request from $inst ILL# $illnum";
 
   #SEND EMAIL to Detestation Library with DKIM Signature
   $email_to = implode(',', $destemailarray);
   $headers =
-  'MIME-Version: 1.0
-  From: "DueNorth" <duenorth@nnyln.org>
-  Content-type: text/html; charset=utf8';
+'MIME-Version: 1.0
+From: "DueNorth" <duenorth@nnyln.org>
+Content-type: text/html; charset=utf8';
 
   $messagedest = preg_replace('/(?<!\r)\n/', "\r\n", $messagedest);
   $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
@@ -181,16 +179,14 @@ if (mysqli_query($db, $sql)) {
 
   #SEND a copy of EMAIL to requester with DKIM sig
   $headers =
-  'MIME-Version: 1.0
-  From: "DueNorth" <duenorth@nnyln.org>
-  Content-type: text/html; charset=utf8';
-  #DKIM Signature to destination
+'MIME-Version: 1.0
+From: "DueNorth" <duenorth@nnyln.org>
+Content-type: text/html; charset=utf8';
+
   $messagereq = preg_replace('/(?<!\r)\n/', "\r\n", $messagereq);
   $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
   mail($email, $subject, $messagereq, $headers);
 
-  #Ask the requester if they would like to do another request
-  echo "<br><br><a href='https://duenorth.nnyln.org'>Would you like to do another request?<a><br>";
 } else {
   #Something happened and could not create a request
   echo "Error: " . $sql . "<br>" . mysqli_error($db);
@@ -198,4 +194,13 @@ if (mysqli_query($db, $sql)) {
 }
 mysqli_close($db);
 }
+}
+#This will generate the web page response
+echo "<br>Details of your request(s):<br>
+Title: <b>$title</b><br>
+Author: <b>$author</b><br>
+Publication Date: <b>$pubdate</b><br><br>
+A copy of this request has also been emailed to the requester $fname $lname at $email.<br>" ;
+#Ask the requester if they would like to do another request
+echo "<br><a href='https://duenorth.nnyln.org'>Would you like to do another request?<a>";
 ?>
