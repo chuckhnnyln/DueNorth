@@ -107,8 +107,8 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     echo "Address: <strong> $libaddress2 </strong><br>";
     echo "&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> $libaddress3 </strong><br>";
     echo "Phone: <strong> $libphone</strong><br>";
-    echo "OCLC Symbol:<strong> $oclc</strong><br>";
-    echo "LOC Code :<strong> $loc</strong><br>";
+    echo "OCLC Symbol: <strong> $oclc</strong><br>";
+    echo "ILL Code: <strong> $loc</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
     echo "<button onclick='showHide($count)'>Show loaning options</button>";
@@ -220,7 +220,7 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     echo "&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> $libaddress3 </strong><br>";
     echo "Phone: <strong> $libphone</strong><br>";
     echo "OCLC Symbol:<strong> $oclc</strong><br>";
-    echo "LOC Code :<strong> $loc</strong><br>";
+    echo "ILL Code: <strong> $loc</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
     echo "<button onclick='showHide($count)'>Show loaning options</button>";
