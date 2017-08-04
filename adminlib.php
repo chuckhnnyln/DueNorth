@@ -109,12 +109,12 @@ if ($pageaction ==3){
       <option value=""></option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
-<option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+<option value = "JLHO">Jefferson-Lewis School Library System</option>
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
+<option value = "SLL">St. Lawrence-Lewis School Library System</option>
     </select>
     <br>
     <input type="submit" value="Submit">
@@ -166,12 +166,12 @@ if ($pageaction ==3){
 <option value=""></option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
-<option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH">Franklin-Essex-Hamilton  School Library System</option>
+<option value = "JLHO">Jefferson-Lewis School Library System</option>
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option></select><br>
+<option value = "SLL">St. Lawrence-Lewis School Library System</option></select><br>
       <B>Items Willing to loan in DueNorth</b><br>
         <ul>
         <li><b>Print Book</b>
@@ -263,12 +263,12 @@ if ($pageaction ==3){
     <B>Library System </b> <select name="system">
 <option value = "CVES" <?php if($system=="CVES") echo "selected=\"selected\""; ?>>Champlain Valley Education Services School Library System</option>
 <option value = "CEFL" <?php if($system=="CEFL") echo "selected=\"selected\""; ?>>Clinton Essex Franklin Library System</option>
-<option value = "FEH" <?php if($system=="FEH") echo "selected=\"selected\""; ?>>Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO" <?php if($system=="JLHO") echo "selected=\"selected\""; ?>>Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH" <?php if($system=="FEH") echo "selected=\"selected\""; ?>>Franklin-Essex-Hamilton School Library System</option>
+<option value = "JLHO" <?php if($system=="JLHO") echo "selected=\"selected\""; ?>>Jefferson-Lewis School Library System</option>
 <option value = "NCLS" <?php if($system=="NCLS") echo "selected=\"selected\""; ?>>North Country Library System</option>
 <option value = "NNYLN" <?php if($system=="NNYLN") echo "selected=\"selected\""; ?>>Northern New York Library Network</option>
 <option value = "OSW" <?php if($system=="OSW") echo "selected=\"selected\""; ?>>Oswego County School Library System at CiTi</option>
-<option value = "SLL" <?php if($system=="SLL") echo "selected=\"selected\""; ?>>St. Lawrence-Lewis BOCES School Library System</option>
+<option value = "SLL" <?php if($system=="SLL") echo "selected=\"selected\""; ?>>St. Lawrence-Lewis School Library System</option>
     </select><br><br>
     <B>Items willing to loan in DueNorth</b><br>
       <table>
@@ -313,12 +313,12 @@ if ($pageaction ==3){
   <option value = "none">Select a system</option>
   <option value = "CVES">Champlain Valley Education Services School Library System</option>
   <option value = "CEFL">Clinton Essex Franklin Library System</option>
-  <option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-  <option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+  <option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+  <option value = "JLHO">Jefferson-Lewis School Library System</option>
   <option value = "NCLS">North Country Library System</option>
   <option value = "NNYLN">Northern New York Library Network</option>
   <option value = "OSW">Oswego County School Library System at CiTi</option>
-  <option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option></select><br>
+  <option value = "SLL">St. Lawrence-Lewis School Library System</option></select><br>
   <br><br>
   <input type="submit" value="Submit">
   </form>

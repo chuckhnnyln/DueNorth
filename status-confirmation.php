@@ -15,12 +15,12 @@ if (($system == "none") || ($system == "")) {
 if ($action == "go") {
   if ($system == "CVES") $displaysystem="Champlain Valley Education Services School Library System";
   if ($system == "CEFL") $displaysystem="Clinton Essex Franklin Library System";
-  if ($system == "FEH") $displaysystem="Franklin-Essex-Hamilton BOCES School Library System";
-  if ($system == "JLHO") $displaysystem="Jefferson-Lewis BOCES School Library System";
+  if ($system == "FEH") $displaysystem="Franklin-Essex-Hamilton School Library System";
+  if ($system == "JLHO") $displaysystem="Jefferson-Lewis School Library System";
   if ($system == "NCLS") $displaysystem="North Country Library System";
   if ($system == "NNYLN") $displaysystem="Northern New York Library Network";
   if ($system == "OSW") $displaysystem="Oswego County School Library System at CiTi";
-  if ($system == "SLL") $displaysystem="St. Lawrence-Lewis BOCES School Library System";
+  if ($system == "SLL") $displaysystem="St. Lawrence-Lewis School Library System";
   echo "You have chosen to <b>$task lending</b> for all libraries of the <b>$displaysystem</b>.<br><br>";
   echo "This will overwrite the setting for these libraries. Are you sure you wish to proceed? ";
   ?><form action="/status-confirmation" method="post">

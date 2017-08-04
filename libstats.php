@@ -124,13 +124,13 @@ if (strcmp($dessysvar,'CVES')==0){
 }else if (strcmp($dessysvar,'CEFL')==0){
     $dessysvartxt = "Clinton Essex Franklin Library System";
 }else if (strcmp($dessysvar,'FEH')==0){
-    $dessysvartxt = "Franklin-Essex-Hamilton BOCES School Library System";
+    $dessysvartxt = "Franklin-Essex-Hamilton School Library System";
 }else if (strcmp($dessysvar,'NCLS')==0){
     $dessysvartxt = "North Country Library System";
 }else if (strcmp($dessysvar,'OSW')==0){
     $dessysvartxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($dessysvar,'SLL')==0){
-    $dessysvartxt = "St. Lawrence-Lewis BOCES School Library System";
+    $dessysvartxt = "St. Lawrence-Lewis School Library System";
 }else{
    $dessysvartxt = "Northern New York Library Network";
 }

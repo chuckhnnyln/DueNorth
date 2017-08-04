@@ -87,12 +87,12 @@ mysqli_select_db($db,$dbname);
      <B>Suspend Your Library's lending status?   </b><select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>&nbsp&nbsp&nbsp&nbspSetting this to <strong>YES</strong> will <strong>prevent</strong> your library getting ILL requests<br>&nbsp&nbsp&nbsp&nbspSetting this to <strong>NO</strong> will <strong>allow</strong> your library to receive ILL requests.<br>
     <?php if($system=="CVES"){ $system="Champlain Valley Education Services School Library System";}?>
      <?php if($system=="CEFL"){ $system="Clinton Essex Franklin Library System";}?>
-     <?php if($system=="FEH"){ $system="Franklin-Essex-Hamilton BOCES School Library System";}?>
-     <?php if($system=="JLHO"){ $system="Jefferson-Lewis BOCES School Library System";}?>
+     <?php if($system=="FEH"){ $system="Franklin-Essex-Hamilton School Library System";}?>
+     <?php if($system=="JLHO"){ $system="Jefferson-Lewis School Library System";}?>
      <?php if($system=="NCLS"){ $system="North Country Library System";}?>
      <?php if($system=="NNYLN"){ $system="Northern New York Library Network";}?>
      <?php if($system=="OSW"){ $system="Oswego County School Library System at CiTi";}?>
-     <?php if($system=="SLL"){ $system="St. Lawrence-Lewis BOCES School Library System";}?>
+     <?php if($system=="SLL"){ $system="St. Lawrence-Lewis School Library System";}?>
     <B>Library System:</b> <?php echo $system?><br>
       <br><br>
       <B>Items willing to loan in DueNorth</b><br>

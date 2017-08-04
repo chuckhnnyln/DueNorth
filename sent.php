@@ -116,6 +116,7 @@ if (mysqli_query($db, $sql)) {
 
   #Copy of message sent to the requester
   $messagereq = "An ILL request ($illnum) has been created for the following: <br><br>
+  Library: $library <br>
   Title: $title <br>
   Author: $author<br>
   Item Type: $itype<br>
@@ -141,6 +142,7 @@ if (mysqli_query($db, $sql)) {
 
   #Message for the destination library
   $messagedest = "An ILL request ($illnum) has been created for the following: <br><br>
+  Library: $library <br>
   Title: $title <br>
   Author: $author<br>
   Item Type: $itype<br>
@@ -197,6 +199,7 @@ mysqli_close($db);
 }
 #This will generate the web page response
 echo "<br>Details of your request(s):<br>
+Library: <b>$library</b><br>
 Title: <b>$title</b><br>
 Author: <b>$author</b><br>
 Publication Date: <b>$pubdate</b><br><br>

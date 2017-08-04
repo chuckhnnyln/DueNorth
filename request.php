@@ -18,24 +18,24 @@ Drupal.behaviors.DisableInputEnter = {
 <form action="sent" method="post">
 <?php
 ####Define the different library systems
-#OPALS
+#OPALS = systemtype OPALS
 $OSW="Oswego County Schools";
 $JLHO="Jefferson-Lewis SLS";
 $SLL="St. Lawrence-Lewis SLS";
 $FEH="Franklin Essex Hamilton SLS";
 $CVES="Champlain Valley Educational Services SLS";
 
-#Innovative
+#Innovative = systemtype Innovative
 $SLU="St. Lawrence University";
 
-#SirsiDynix
+#SirsiDynix systemtype= SirsiDynix
 $PSCOLL="Paul Smith's College";
 $NCLS="North Country Library System";
 
-#SirsiDynix Horizon
+#SirsiDynix Horizon systemtype Horizon
 $CEFL="CEF Library System";
 
-#ExLibris Aleph
+#ExLibris Aleph systemtype Generic Handling
 $SUNYOSW="SUNY Oswego";
 $SUNYPOT="SUNY Potsdam";
 $SUNYCAN="SUNY Canton";
@@ -43,7 +43,7 @@ $SUNYPLA="SUNY Plattsburgh";
 $JEFCC="Jefferson Community College";
 $NCCC="North Country Community College";
 
-#OCLC
+#OCLC systemtype NOTHING
 $CLARKSON="Clarkson University";
 
 #Get the IDs needed for curl command
@@ -69,49 +69,43 @@ function checkitype ($mylocholding,$itemtype){
   $GETLISTSQL="SELECT book,av,journal,reference,ebook FROM `SENYLRC-SEAL2-Library-Data` where alias like '%$mylocholding%' ";
   $result=mysqli_query($db, $GETLISTSQL);
   while($row = $result->fetch_assoc() ){
-    if (strpos($itemtype, 'book') !== 1) {
+    if ((strcmp($itemtype, 'book') == 0) || (strcmp($itemtype, 'book (large print)') == 0)) {
       #See if  request is for a book
       if ( $row['book']==1   ) {
       #Checking if book is allowed
         return 1;
       }
     }
-    if (strpos($itemtype, 'recording') !== 1) {
-    #See if  request is  audio video related
-      if ( $row['av']==1   ) {
-      #Checking if AV is allowed
-        return 1;
-      }
-    }
-    if (strpos($itemtype, 'video') !== 1) {
-    #See if  request is  audio video related
-      if ( $row['av']==1   ) {
-      #Checking if AV is allowed
-        return 1;
-      }
-    }
-    if (strpos($itemtype, 'journal') !== 1) {
+    if (strcmp($itemtype, 'journal') == 0) {
     #See if  request is for a journal
       if ( $row['journal']==1   ) {
       #Checking if journal is allowed
         return 1;
       }
     }
-    if (strpos($itemtype, 'reference') !== 1) {
-    #See if  request is for reference
-      if ( $row['reference']==1   ) {
-      #Checking if reference is allowed
-        return 1;
-      }
-    }
-    if (strpos($itemtype, 'electronic') !== 1) {
+    if ( (strcmp($itemtype, 'book (electronic)') == 0) || (strcmp($itemtype, 'web') == 0) ) {
     #See if  request is for ebook
       if ( $row['ebook']==1   ) {
       #Checking if e-book is allowed
         return 1;
       }
     }
+    if ( (strpos($itemtype, 'recording') !== FALSE) || (strpos($itemtype, 'video') !== FALSE) || (strpos($itemtype, 'audio') !== FALSE) ){
+    #See if  request is  audio video related
+      if ( $row['av']==1   ) {
+      #Checking if AV is allowed
+        return 1;
+      }
+    }
+    if ( (strcmp($itemtype, 'other') == 0) || (strcmp($itemtype, 'music-score') == 0) || (strcmp($itemtype, 'map') == 0) ) {
+    #See if  request is for reference
+      if ( $row['reference']==1   ) {
+      #Checking if reference is allowed
+        return 1;
+      }
+    }
   }
+  return 0; #Matched none of the above
 }
 
 #Function to see if library is part of SEAL via alias
@@ -537,44 +531,41 @@ $systemtype="OPALS";
     #See if holding is from a SEAL Library and get email
     $sealcheck=checklib_ill($mylocholding);
     $destloc=$sealcheck[0];
-    $destemail=$sealcheck[2];
     $sealstatus=$sealcheck[1];
+    $destemail=$sealcheck[2];
     #See if library is suspended
     $suspendstatus=checklib_suspend($mylocholding);
+    $libname=getlibname($mylocholding);
     #Check if they will loan that item type
     $itemtypecheck = checkitype ($mylocholding,$itemtype);
-    if  (($sealstatus==1)&&($itemtypecheck==1) && (strlen($destemail) > 2)&& ($suspendstatus==0)){
-      #only process a library if they particate in seal and have a lending email
-      #Set the Library name to the catalog name  this is OK for places that don't have multple locations defined
-      $libname=$locname;
-      #Get the Library system for the destination library
-      $libsystemq=getlibsystem($mylocholding);
-      #See if we need to filter library for requester from MH requesters
-      if ($field_filter_own_system[0]['value']>0){
-        $filterstatus=checkfilter ($libsystemq,$field_home_library_system[0]['value']);
-        } else {
-          $filterstatus=0;
+    $libsystemq=getlibsystem($mylocholding);
+    if ($field_filter_own_system[0]['value']>0){
+      $filterstatus=checkfilter ($libsystemq,$field_home_library_system[0]['value']);
+      } else {
+        $filterstatus=0;
+      }
+    $mylocalAvailability = str_replace(" ","", $mylocalAvailability);
+    $mylocalAvailability = str_replace("\n","", $mylocalAvailability);
+    #Dianostic information for development
+    echo "<!-- \n";
+    echo "loccount: $loccount \n";
+    echo "systemtype: $systemtype \n";
+    echo "libname: $libname \n";
+    echo "mylocholding: $mylocholding \n";
+    echo "libsystemq: $libsystemq \n";
+    echo "suspendstatus: $suspendstatus (0)\n";
+    echo "itemtypecheck: $itemtypecheck (1)\n";
+    echo "sealstatus: $sealstatus (1)\n";
+    echo "destemail: $destemail \n";
+    echo "mylocalAvailability: ~$mylocalAvailability~ (Available)\n";
+    echo "filterstatus: $filterstatus (0)\n";
+    echo "itemtype: $itemtype\n";
+    echo "\n-->\n\n";
+    #If they are not filtering own system show this library as a destination
+    if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($filterstatus==0)&&($mylocalAvailability=="Available") ) {
+      $loccount=$loccount+1;
+      echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc."'><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br>";
         }
-      $mylocalAvailability = str_replace(" ","", $mylocalAvailability);
-      $mylocalAvailability = str_replace("\n","", $mylocalAvailability);
-        #Dianostic information for development
-        echo "<!-- \n";
-        echo "systemtype: $systemtype \n";
-        echo "libname: $libname \n";
-        echo "libsystemq: $libsystemq \n";
-        echo "suspendstatus: $suspendstatus (0)\n";
-        echo "itemtypecheck: $itemtypecheck (1)\n";
-        echo "sealstatus: $sealstatus (1)\n";
-        echo "destemail: $destemail \n";
-        echo "mylocalAvailability: ~$mylocalAvailability~ (Available)\n";
-        echo "filterstatus: $filterstatus (0)\n";
-        echo "\n-->\n\n";
-        #If they are not filtering own system show this library as a destination
-        if (($suspendstatus==0)&&($itemtypecheck==1)&&($sealstatus==1)&&(strlen($destemail) > 2)&&($filterstatus==0)&&($mylocalAvailability=="Available") ) {
-          $loccount=$loccount+1;
-          echo"<input type='checkbox' class='librarycheck' name='destination[]' value='". $mylocholding.":".$libname.":".$libsystemq.":".$mylocalAvailability.":".$mylocalcallNumber.":".$mylocalcallLocation.":".$destemail.":".$destloc."'><strong>".$libname."</strong>, Availability: $mylocalAvailability, Call Number: $mylocalcallNumber</br>";
-        }
-      } #End processing destination library that is active in SEAL
     } #This end the for each statement in the last else for catalogs
   }
 }#This is the end of the for loop for locations

@@ -51,12 +51,12 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     <option value=""></option>
     <option value = "CVES">Champlain Valley Education Services School Library System</option>
     <option value = "CEFL">Clinton Essex Franklin Library System</option>
-    <option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-    <option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+    <option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+    <option value = "JLHO">Jefferson-Lewis School Library System</option>
     <option value = "NCLS">North Country Library System</option>
     <option value = "NNYLN">Northern New York Library Network</option>
     <option value = "OSW">Oswego County School Library System at CiTi</option>
-    <option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
+    <option value = "SLL">St. Lawrence-Lewis School Library System</option>
   </select>
   <br>
   <input type="submit" value="Submit">
@@ -164,12 +164,12 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     <option value=""></option>
     <option value = "CVES">Champlain Valley Education Services School Library System</option>
     <option value = "CEFL">Clinton Essex Franklin Library System</option>
-    <option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-    <option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+    <option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+    <option value = "JLHO">Jefferson-Lewis School Library System</option>
     <option value = "NCLS">North Country Library System</option>
     <option value = "NNYLN">Northern New York Library Network</option>
     <option value = "OSW">Oswego County School Library System at CiTi</option>
-    <option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
+    <option value = "SLL">St. Lawrence-Lewis School Library System</option>
   </select>
   <br>
   <input type="submit" value="Submit">

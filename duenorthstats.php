@@ -86,13 +86,13 @@ if (strcmp($libsystem,'CVES')==0){
 }else if (strcmp($libsystem,'CEFL')==0){
     $libsystemtxt = "Clinton Essex Franklin Library System";
 }else if (strcmp($libsystem,'FEH')==0){
-    $libsystemtxt = "Franklin-Essex-Hamilton BOCES School Library System";
+    $libsystemtxt = "Franklin-Essex-Hamilton School Library System";
 }else if (strcmp($libsystem,'NCLS')==0){
     $libsystemtxt = "North Country Library System";
 }else if (strcmp($libsystem,'OSW')==0){
     $libsystemtxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($libsystem,'SLL')==0){
-    $libsystemtxt = "St. Lawrence-Lewis BOCES School Library System";
+    $libsystemtxt = "St. Lawrence-Lewis School Library System";
 }else{
    $libsystemtxt = "Northern New York Library Network";
    }
@@ -130,13 +130,13 @@ if (strcmp($dessysvar,'CVES')==0){
 }else if (strcmp($dessysvar,'CEFL')==0){
     $dessysvartxt = "Clinton Essex Franklin Library System";
 }else if (strcmp($dessysvar,'FEH')==0){
-    $dessysvartxt = "Franklin-Essex-Hamilton BOCES School Library System";
+    $dessysvartxt = "Franklin-Essex-Hamilton School Library System";
 }else if (strcmp($dessysvar,'NCLS')==0){
     $dessysvartxt = "North Country Library System";
 }else if (strcmp($dessysvar,'OSW')==0){
     $dessysvartxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($dessysvar,'SLL')==0){
-    $dessysvartxt = "St. Lawrence-Lewis BOCES School Library System";
+    $dessysvartxt = "St. Lawrence-Lewis School Library System";
 }else{
    $dessysvartxt = "Northern New York Library Network";
    }
@@ -302,12 +302,12 @@ if (strcmp($dessysvar,'CVES')==0){
                     <option value="">All</option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
-<option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+<option value = "JLHO">Jefferson-Lewis School Library System</option>
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
+<option value = "SLL">St. Lawrence-Lewis School Library System</option>
      <input type="hidden" name="stattype" value="wholesystem">
      <input type="submit" value="Submit">
     </form>
