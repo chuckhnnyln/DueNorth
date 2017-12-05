@@ -51,7 +51,12 @@ foreach($_POST['destination'] as $destination) {
   #Run this routine for each destination provided for multi-request.
 
 #Split Destination contents
-list($libcode,$library,$destsystem, $itemavail, $itemcall, $itemlocation, $destemail, $destloc) = explode(":", $destination);
+list($libcode, $library, $destsystem, $itemavail, $itemcall, $itemlocation, $destemail, $destloc) = explode(":", $destination);
+
+#UnHTML encodes call numbers that might strange characters
+$itemcall = htmlspecialchars_decode($itemcall,ENT_QUOTES);
+$libcode = htmlspecialchars_decode($libcode,ENT_QUOTES);
+$library = htmlspecialchars_decode($library,ENT_QUOTES);
 
 #Put the dest email in an array in case the library has more than one person who gets the message
 $destemailarray = explode(';', $destemail);
@@ -95,6 +100,7 @@ $destloc = trim($destloc);
 $reqLOCcode = trim($reqLOCcode);
 
 #The SQL statement to insert for Stats and to recall if needed in the future
+#$itemcall_s = mysql_escape_string($itemcall);
 $sql = "INSERT INTO `seal`.`SENYLRC-SEAL2-STATS` (`illNUB`,`Title`,`Author`,`pubdate`,`reqisbn`,`reqissn`,`itype`,`Call Number`,`Location`,`Available`,`article`,`needbydate`,`reqnote`,`Destination`,`DestSystem`,`Requester lib`,`Requester LOC`,`ReqSystem`,`Requester person`,`requesterEMAIL`,`Timestamp`,`Fill`,`responderNOTE`,`requesterPhone`,`saddress`,`caddress`)
 VALUES ('0','$ititle','$iauthor','$pubdate','$isbn','$issn','$itype','$itemcall','$itemlocation','$itemavail','$article','$needbydate','$reqnote','$destloc','$destsystem','$inst','$reqLOCcode','$reqsystem','$fname $lname','$email','$today','3','','$wphone','$saddress','$caddress')";
 
@@ -123,7 +129,7 @@ if (mysqli_query($db, $sql)) {
   Publication Date: $pubdate<br>
   $isbn<br>
   $issn<br>
-  Call Number: $itemcall <br>
+  Call Number: " . $itemcall . " <br>
   Availability Status: $itemavail<br>
   Location: $itemlocation<br>
   $article<br><br>
@@ -133,8 +139,8 @@ if (mysqli_query($db, $sql)) {
   $inst<br>
   $address<br>
   $caddress<br><br>
-  $needbydate<br>
-  $reqnote<br> <br><br>
+  Need by: $needbydate<br>
+  Note from requestor: $reqnote<br><br><br>
   The request was created by:<br>
   $fname $lname<br>
   $email<br>
@@ -149,7 +155,7 @@ if (mysqli_query($db, $sql)) {
   Publication Date: $pubdate<br>
   $isbn<br>
   $issn<br>
-  Call Number: $itemcall <br>
+  Call Number: " . $itemcall . " <br>
   Availability Status: $itemavail<br>
   Location: $itemlocation<br>
   $article<br><br><br>
@@ -157,8 +163,8 @@ if (mysqli_query($db, $sql)) {
   $inst<br>
   $address<br>
   $caddress<br><br>
-  $needbydate<br>
-  $reqnote<br>
+  Need by: $needbydate<br>
+  Note from requestor: $reqnote<br><br><br>
   The request was created by:<br>
   $fname $lname<br>
   $email<br>
@@ -168,22 +174,16 @@ if (mysqli_query($db, $sql)) {
   #Set email subject for request
   $subject = "NEW ILL Request from $inst ILL# $illnum";
 
-  #SEND EMAIL to Detestation Library with DKIM Signature
+  #SEND EMAIL to destination Library with DKIM Signature
   $email_to = implode(',', $destemailarray);
-  $headers =
-'MIME-Version: 1.0
-From: "DueNorth" <duenorth@nnyln.org>
-Content-type: text/html; charset=utf8';
+  $headers = 'MIME-Version: 1.0' . "\r\n" . 'From: "DueNorth" <duenorth@nnyln.org>' . "\r\n" . "Reply-to: " . $email . "\r\n" . 'Content-type: text/html; charset=utf8';
 
   $messagedest = preg_replace('/(?<!\r)\n/', "\r\n", $messagedest);
   $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
   mail($email_to, $subject, $messagedest, $headers);
 
   #SEND a copy of EMAIL to requester with DKIM sig
-  $headers =
-'MIME-Version: 1.0
-From: "DueNorth" <duenorth@nnyln.org>
-Content-type: text/html; charset=utf8';
+  $headers = 'MIME-Version: 1.0' . "\r\n" . 'From: "DueNorth" <duenorth@nnyln.org>' . "\r\n" . "Reply-to: " . $email_to . "\r\n" . 'Content-type: text/html; charset=utf8';
 
   $messagereq = preg_replace('/(?<!\r)\n/', "\r\n", $messagereq);
   $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);

@@ -257,7 +257,7 @@ if ($pageaction ==3){
     <B>Street Address:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address2" value="<?php echo $address2?>"><br>
     <B>City State Zip:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address3" value="<?php echo $address3?>"><br>
     <B>OCLC Symbol:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="oclc" value="<?php echo $oclc?>"><br>
-    <B>LOC Location:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc" value="<?php echo $loc?>"><br>
+    <B>ILL Code:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc" value="<?php echo $loc?>"><br>
     <B>Library ILL participant </b> <select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
     <B>Suspend ILL </b> <select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
     <B>Library System </b> <select name="system">

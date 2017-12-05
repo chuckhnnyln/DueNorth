@@ -10,6 +10,28 @@
   </script>
 <?php
 
+function elementHunt($startdated, $hunting) {
+  switch ($hunting) {
+    case "D":
+      $hunted = substr($startdated, 3, 2);
+      break;
+    case "M":
+      $hunted = substr($startdated, 0, 2);
+      break;
+    case "Y":
+      $hunted = substr($startdated, 6, 4);
+      break;
+  }
+  return $hunted;
+}
+
+function convertDate($InputDate){
+  $Y = elementHunt($InputDate,"Y");
+  $M = elementHunt($InputDate,"M");
+  $D = elementHunt($InputDate,"D");
+  $OutputDate = $Y . "-" . $M . "-" . $D;
+  return $OutputDate;
+}
 
 #####Connect to database
 require '../seal_script/seal_db.inc';
@@ -18,28 +40,29 @@ mysqli_select_db($db,$dbname);
 
 
 if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'} ) )     ) {
-  $startdate = date('Y-m-d', strtotime('-7 days'));
- $enddated = $_REQUEST["enddate"];
- $startdated =   $_REQUEST["startdate"];
- $libname = $_REQUEST["libname"];
- $loc = $_REQUEST["loc"];
- $libname=$_REQUEST["libname"];
+  #$startdate = date('Y-m-d', strtotime('-7 days'));
+  $enddated = $_REQUEST["enddate"];
+  $startdated =   $_REQUEST["startdate"];
+  $libname = $_REQUEST["libname"];
+  $loc = $_REQUEST["loc"];
+  $libname=$_REQUEST["libname"];
 
 if (strlen ($libname) >2){
   $loc = $libname;
 }
 
 $loc = mysqli_real_escape_string($db,$loc);
-$startdate = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $startdated)));
-$enddate = date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $enddated)));
+if ( $enddated == "" ) { $enddated = date("m/d/Y"); }
+$startdate = convertDate($startdated);
+$enddate = convertDate($enddated);
 
  #Get total requests
-$GETREQUESTCOUNTSQLL= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00' ";
+$GETREQUESTCOUNTSQLL= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59' ";
 $retval = mysqli_query($db, $GETREQUESTCOUNTSQLL);
 $row_cnt = mysqli_num_rows($retval);
 
  #Get total filled requests
-$FINDFILL= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'     and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  and  Fill =1 ";
+$FINDFILL= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'     and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  and  Fill =1 ";
 $retfilled =   mysqli_query($db, $FINDFILL);
 $row_fill = mysqli_num_rows($retfilled);
 #Get percentage fill
@@ -47,7 +70,7 @@ $percentfill = $row_fill/$row_cnt;
 $percent_friendly_fill = number_format( $percentfill * 100, 2 ) . '%';
 
  #Get total not filled requests
-$FINDNOTFILL= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  and  Fill =0 ";
+$FINDNOTFILL= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  and  Fill =0 ";
 $retnotfilled =   mysqli_query($db, $FINDNOTFILL);
 $row_notfill = mysqli_num_rows($retnotfilled);
 
@@ -56,7 +79,7 @@ $percentnotfill = $row_notfill/$row_cnt;
 $percent_friendly_notfill = number_format( $percentnotfill * 100, 2 ) . '%';
 
  #Get total requests expired
-$FINDEXPIRE= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  and  Fill =4 ";
+$FINDEXPIRE= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  and  Fill =4 ";
 $retexpire =   mysqli_query($db, $FINDEXPIRE);
 $row_expire = mysqli_num_rows($retexpire);
 #Get percentage fill
@@ -64,7 +87,7 @@ $percentexpire = $row_expire/$row_cnt;
 $percent_friendly_expire = number_format( $percentexpire * 100, 2 ) . '%';
 
  #Get total requests not answered
-$FINDNOANSW= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  and  Fill =3 ";
+$FINDNOANSW= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  and  Fill =3 ";
 $retnoansw =   mysqli_query($db, $FINDNOANSW);
 $row_noansw = mysqli_num_rows($retnoansw);
 #Get percentage fill
@@ -72,7 +95,7 @@ $percentnoansw = $row_noansw/$row_cnt;
 $percent_friendly_noansw = number_format( $percentnoansw * 100, 2 ) . '%';
 
  #Get total requests canceled
-$CANANSW= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'    and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  and  Fill =6 ";
+$CANANSW= "SELECT * FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'    and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  and  Fill =6 ";
 $canansw =   mysqli_query($db, $CANANSW);
 $row_cancel = mysqli_num_rows($canansw);
 #Get percentage fill
@@ -103,12 +126,12 @@ $libname =  $row["Name"];
 
     echo "<h3>Break down of requests</h3>";
    #Find which systems they sent request to
-   $destsystem=" SELECT distinct (`DestSystem` )  FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  ";
+   $destsystem=" SELECT distinct (`DestSystem` )  FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  ";
    $destsystemq = mysqli_query($db, $destsystem);
     #loop through the results of destion systems
     while ($row = mysqli_fetch_assoc($destsystemq)) {
         $dessysvar= $row['DestSystem'];
-        $destsystemcount=" SELECT `itype`  FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  ";
+        $destsystemcount=" SELECT `itype`  FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'  ";
         $destsystemcountq = mysqli_query($db,  $destsystemcount);
         #Count the number of requests to that system
         $destnum_rows = mysqli_num_rows($destsystemcountq);
@@ -137,14 +160,14 @@ if (strcmp($dessysvar,'CVES')==0){
 
         echo " ". $destnum_rows ." (".$percent_friendly_destnum.") overall requests were made  to <strong> ".$dessysvartxt."</strong><br>";
         #Find which item types were requests
-        $destitype=" SELECT distinct (`itype` )  FROM `SENYLRC-SEAL2-STATS`  WHERE `Requester LOC` LIKE '$loc'    and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00' ";
+        $destitype=" SELECT distinct (`itype` )  FROM `SENYLRC-SEAL2-STATS`  WHERE `Requester LOC` LIKE '$loc'    and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59' ";
         $destitypeq = mysqli_query($db, $destitype);
         #loop through the results of items from that destination
         while ($row2 = mysqli_fetch_assoc($destitypeq)) {
             $dessysitype= $row2['itype'];
              #Remove any white space
 
-            $destitemcount=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'";
+            $destitemcount=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'";
             $destitemcountq = mysqli_query($db,  $destitemcount);
             #Count the number of reuqests to that system
             $destnumitype_rows = mysqli_num_rows($destitemcountq);
@@ -157,7 +180,7 @@ if (strcmp($dessysvar,'CVES')==0){
             echo "&nbsp&nbsp&nbsp".$destnumitype_rows." (".$percent_friendly_typesys.") of the request to ".$dessysvartxt." were <strong>".$dessysitype."</strong><br>";
 
             #Find what the fill rate is
-            $destitemcountfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='1' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'   and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'";
+            $destitemcountfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='1' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'   and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'";
             $destitemcountfillq = mysqli_query($db,  $destitemcountfill);
             #Count the number of fills
             $destnumfilled_rows = mysqli_num_rows($destitemcountfillq);
@@ -169,7 +192,7 @@ if (strcmp($dessysvar,'CVES')==0){
             echo " &nbsp&nbsp&nbsp&nbsp&nbsp      $destnumfilled_rows (".$percent_friendly_1.") were filled<br>";
 
             #Find what the unfill rate is
-            $destitemcountunfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='0' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'   and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'";
+            $destitemcountunfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='0' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'   and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'";
             $destitemcountunfillq = mysqli_query($db,  $destitemcountunfill);
             #Count the number of unfilled
             $destnumunfilled_rows = mysqli_num_rows($destitemcountunfillq);
@@ -181,7 +204,7 @@ if (strcmp($dessysvar,'CVES')==0){
             echo "&nbsp&nbsp&nbsp&nbsp&nbsp   $destnumunfilled_rows (". $percent_friendly_2.") were not filled<br>";
 
            #Find what the expire rate is
-            $destitemcountexfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='4' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'";
+            $destitemcountexfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='4' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'";
             $destitemcountexfillq = mysqli_query($db,  $destitemcountexfill);
             #Count the number of expired requests
             $destnumexfilled_rows = mysqli_num_rows($destitemcountexfillq);
@@ -193,7 +216,7 @@ if (strcmp($dessysvar,'CVES')==0){
            echo "&nbsp&nbsp&nbsp&nbsp&nbsp   $destnumexfilled_rows (". $percent_friendly_3.") were expired<br>";
 
            #Find what the cancel rate is
-            $destitemcountcanfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='6' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'";
+            $destitemcountcanfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='6' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'";
             $destitemcountcanfillq = mysqli_query($db,  $destitemcountcanfill);
             #Count the number of canceled requests
             $destnumcanfilled_rows = mysqli_num_rows($destitemcountcanfillq);
@@ -205,7 +228,7 @@ if (strcmp($dessysvar,'CVES')==0){
             echo "&nbsp&nbsp&nbsp&nbsp&nbsp   $destnumcanfilled_rows  (". $percent_friendly_4.") were canceled<br>";
 
             #Find the numbered not answer yet
-            $destitemcountnoanswfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='3' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'";
+            $destitemcountnoanswfill=" SELECT `fill`  FROM `SENYLRC-SEAL2-STATS` WHERE Fill='3' and `Itype`='$dessysitype' and `Requester LOC` LIKE '$loc'  and `DestSystem`='$dessysvar' and `Timestamp` >= '$startdate 00:00:00' and `Timestamp` <= '$enddate 11:59:59'";
 
             $destitemcountnoanswfillq = mysqli_query($db,  $destitemcountnoanswfill);
             #Count the number of requests not answered yet

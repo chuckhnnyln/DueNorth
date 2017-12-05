@@ -17,6 +17,12 @@ require '../seal_script/seal_db.inc';
 $db = mysqli_connect($dbhost, $dbuser, $dbpass);
 mysqli_select_db($db,$dbname);
 
+#Pull the information of the person from Drupal users
+global $user;   // load the user entity so to pick the field from.
+$user_contaning_field = user_load($user->uid);  // Check if we're dealing with an authenticated user
+if($user->uid) {    // Get field value;
+  $AuthedUser=1;
+}
 
 if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
   #Display the searched results
@@ -107,7 +113,12 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     echo "Address: <strong> $libaddress2 </strong><br>";
     echo "&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> $libaddress3 </strong><br>";
     echo "Phone: <strong> $libphone</strong><br>";
-    echo "OCLC Symbol: <strong> $oclc</strong><br>";
+    if ( $AuthedUser == 1 ) {
+      echo "ILL Email(s): <a href='mailto:$illemail' target='_blank'>$illemail</a><br>";
+    }
+    if ( $oclc != "" ) {
+          echo "OCLC Symbol: <strong> $oclc</strong><br>";
+    }
     echo "ILL Code: <strong> $loc</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
@@ -219,7 +230,12 @@ if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {
     echo "Address: <strong> $libaddress2 </strong><br>";
     echo "&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> $libaddress3 </strong><br>";
     echo "Phone: <strong> $libphone</strong><br>";
-    echo "OCLC Symbol:<strong> $oclc</strong><br>";
+    if ( $AuthedUser == 1 ) {
+      echo "ILL Email(s): <a href='mailto:$illemail' target='_blank'>$illemail</a><br>";
+    }
+    if ( $oclc != "" ) {
+          echo "OCLC Symbol: <strong> $oclc</strong><br>";
+    }
     echo "ILL Code: <strong> $loc</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
