@@ -19,7 +19,7 @@ function getWorkingDays($startDate,$endDate,$holidays){
 
     //---->The two can be equal in leap years when february has 29 days, the equal sign is added here
     //In the first case the whole interval is within a week, in the second case the interval falls in two weeks.
-	
+
     if ($the_first_day_of_week <= $the_last_day_of_week) {
         if ($the_first_day_of_week <= 6 && 6 <= $the_last_day_of_week) $no_remaining_days--;
         if ($the_first_day_of_week <= 7 && 7 <= $the_last_day_of_week) $no_remaining_days--;
@@ -98,17 +98,17 @@ while ($row = mysqli_fetch_assoc($retval)) {
 			#Get just the date from time stampe
 			$reqdate = substr($timestamp, 0, 10);
 			#Calculate date what five days from request is
-                        $calenddate= date( "Y-m-d", strtotime( "$reqdate +5 day" ) ); 
+                        $calenddate= date( "Y-m-d", strtotime( "$reqdate +5 day" ) );
 			$nubworkdays= getWorkingDays($reqdate,$calenddate,$holidays);
 			if ($nubworkdays < '5'){
 				$diff =  5 - $nubworkdays;
-				$calenddate= date( "Y-m-d", strtotime( "$calenddate  +$diff day" ) ); 
+				$calenddate= date( "Y-m-d", strtotime( "$calenddate  +$diff day" ) );
 			}else{
 				$diff='0';
 			}
 			$today = date("Y-m-d");
-			
-			###Get the Destination 
+
+			###Get the Destination
             $GETLISTSQLDESTEMAIL="SELECT `ILL Email`,`Name` FROM `SENYLRC-SEAL2-Library-Data` where loc LIKE '$destination' limit 1";
             $resultdestemail=mysqli_query($db, $GETLISTSQLDESTEMAIL);
 	        while ($rowdesteamil = mysqli_fetch_assoc($resultdestemail)) {
@@ -116,10 +116,10 @@ while ($row = mysqli_fetch_assoc($retval)) {
                                 $destname=$rowdesteamil["Name"];
 			}
 			$destemailarray = explode(';', $destemail);
-			
+
 			if ($calenddate < $today) {
 				###Will now send out the reminders if we past 3 working days
-				
+
 				#########SETUP email
 				#Well set these to white space if they are empty to prevent an error message
 				if ( empty($needbydatet)) $needbydatet='';
@@ -129,9 +129,9 @@ while ($row = mysqli_fetch_assoc($retval)) {
 					if ( empty($arttile)) $article='';
 						######Copy of message sent to the requester
 						$messagereq = "ILL request ($illnum) has EXPIRED and was not be filled by $destname,  please resubmit to a different library: <br><br>
-						Title: $title <br>  
+						Title: $title <br>
 						Author: $author<br>
-						Item Type: $itype<br> 
+						Item Type: $itype<br>
 						Publication Date: $pubdate<br>
 						$isbn<br>
        						$issn<br>
@@ -146,9 +146,9 @@ while ($row = mysqli_fetch_assoc($retval)) {
 
 						######Message for the destination library
 						$messagedest = "ILL request ($illnum) has EXPIRED, the requester has been instructed to resubmit to a different library: <br><br>
-						Title: $title <br>  
+						Title: $title <br>
 						Author: $author<br>
-						Item Type: $itype<br> 
+						Item Type: $itype<br>
 						Publication Date: $pubdate<br>
 						$isbn<br>
        						$issn<br>
@@ -162,12 +162,12 @@ while ($row = mysqli_fetch_assoc($retval)) {
 						<br>";
 
 						#######Set email subject for request
-						$subject = "ILL Request from $inst ILL# $illnum EXPIRED";
-						
+						$subject = "EXPIRED ILL Request from $inst ILL# $illnum";
+
 						#Set email to me for testing
 						#$destemail = 'spalding@senylrc.org';
 						#$email='spalding@senylrc.org';
-						
+
 						#####SEND EMAIL to Detestation Library with DKIM sig
                                                 $email_to = implode(',', $destemailarray);
                                                 $headers = "From: DueNorth <duenorth@nnyln.org>\r\n" ;

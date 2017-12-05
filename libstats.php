@@ -79,7 +79,7 @@ $row_cancel = mysqli_num_rows($canansw);
 $percentcancel = $row_cancel/$row_cnt;
 $percent_friendly_cancel = number_format( $percentcancel * 100, 2 ) . '%';
 
-  
+
 
 #Get the library name
 $libnames= "SELECT Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `LOC` LIKE '$loc'  ";
@@ -89,8 +89,8 @@ $libname =  $row["Name"];
 }
 
     #Stats overall in the time frame chosen
-   echo "<h1><center>SEAL Stats from $startdated to $enddated </h1></center>";
-   echo "<h1>Borrower  statistics for ".$libname."  </h1>";
+   echo "<h1>DueNorth Stats from $startdated to $enddated </h1>";
+   echo "<br><h3>Borrower statistics for ".$libname."  </h3>";
    echo "Total Request Placed  ".$row_cnt." <br>";
    echo "Number of Request Filled: ".$row_fill." (".$percent_friendly_fill.")<br>";
    echo "Number of Request Not Filled: ".$row_notfill." (".$percent_friendly_notfill.")<br>";
@@ -101,7 +101,7 @@ $libname =  $row["Name"];
 
 
 
-    echo "<h1>Break down of requests</h1>";
+    echo "<h3>Break down of requests</h3>";
    #Find which systems they sent request to
    $destsystem=" SELECT distinct (`DestSystem` )  FROM `SENYLRC-SEAL2-STATS` WHERE `Requester LOC` LIKE '$loc'   and `Timestamp` > '$startdate 00:00:00' and `Timestamp` < '$enddate 00:00:00'  ";
    $destsystemq = mysqli_query($db, $destsystem);
@@ -124,13 +124,13 @@ if (strcmp($dessysvar,'CVES')==0){
 }else if (strcmp($dessysvar,'CEFL')==0){
     $dessysvartxt = "Clinton Essex Franklin Library System";
 }else if (strcmp($dessysvar,'FEH')==0){
-    $dessysvartxt = "Franklin-Essex-Hamilton BOCES School Library System";
+    $dessysvartxt = "Franklin-Essex-Hamilton School Library System";
 }else if (strcmp($dessysvar,'NCLS')==0){
     $dessysvartxt = "North Country Library System";
 }else if (strcmp($dessysvar,'OSW')==0){
     $dessysvartxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($dessysvar,'SLL')==0){
-    $dessysvartxt = "St. Lawrence-Lewis BOCES School Library System";
+    $dessysvartxt = "St. Lawrence-Lewis School Library System";
 }else{
    $dessysvartxt = "Northern New York Library Network";
 }
@@ -227,7 +227,7 @@ if (isset($_GET['loc'])){  $loc = $_GET['loc'];  }else{$loc='null';}
 
     $libname=$_REQUEST["libname"];
           ?>
-     <h2>Enter your desired date range:</h2>
+     <h3>Enter your desired date range:</h3>
 
 
      <form action="/libstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">

@@ -1,12 +1,8 @@
 <?php
 
-###response.php###
-
 ##Get values
 $reqnumb=$_REQUEST["num"];
-if (isset($_REQUEST['a'])) {    $reqanswer = $_REQUEST['a'];    }else{    $reqanswer='';   }
-
-
+if (isset($_REQUEST['a'])) {    $reqanswer = $_REQUEST['a']; }else{    $reqanswer='';   }
 
 #####Connect to database
 require '../seal_script/seal_db.inc';
@@ -20,19 +16,19 @@ $reqanswer = mysqli_real_escape_string($db, $reqanswer);
 
 ###Process any notes from the lender#############################
 if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
-	$respnote=$_REQUEST["respondnote"];
-	$resfill=$_REQUEST["fill"];
-	####Escape values for security
+    $respnote=$_REQUEST["respondnote"];
+    $resfill=$_REQUEST["fill"];
+    ####Escape values for security
     $respnote = mysqli_real_escape_string($db,  $respnote);
-	$resfill = mysqli_real_escape_string($db,  $resfill);
+    $resfill = mysqli_real_escape_string($db,  $resfill);
     $sqlupdate = "UPDATE `seal`.`SENYLRC-SEAL2-STATS` SET `emailsent` = '1' , `responderNOTE` =  '$respnote' WHERE `illNUB` = '$reqnumb'";
 
     if (mysqli_query($db, $sqlupdate)) {
         echo "Thank you.  Your response has been recorded to the request<br><br>";
         ####Setup the note data to be in email
         $respnote=stripslashes($respnote);
-        if (strlen($respnote)>0)  $respnote="The lending library has noted the following <br> $respnote";
-	        $sqlselect="select responderNOTE,requesterEMAIL,Title,Destination from  `seal`.`SENYLRC-SEAL2-STATS` where illNUB='$reqnumb'  LIMIT 1 ";
+        if (strlen($respnote)>0)  $respnote="The lending library has noted the following:<br> $respnote";
+            $sqlselect="select responderNOTE,requesterEMAIL,Title,Destination from `seal`.`SENYLRC-SEAL2-STATS` where illNUB='$reqnumb'  LIMIT 1 ";
             $result = mysqli_query($db,$sqlselect);
             $row = mysqli_fetch_array($result) ;
             $title =$row['Title'];
@@ -56,39 +52,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
 
 
             ####sending filled email#####
-		    if ($resfill=='1'){
+            if ($resfill=='1'){
 
                 #######Setting up email notification
                 $message = "Your ILL request $reqnumb for $title will be filled by $destlib <br><br>$respnote ".
                                      "<br><br>Please email <b>".$destemail_to."</b> for future communications regarding this request ";
                 #######Setup php email headers
                 $to=$requesterEMAIL;
-                $subject = "ILL Request Filled ILL# $reqnumb  ";
+                $subject = "FILLED ILL Request ILL# $reqnumb  ";
                 #####SEND requester an email to let them know the request will be filled
                 $message = preg_replace('/(?<!\r)\n/', "\r\n", $message);
                 $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
                 mail($to, $subject, $message, $headers);
 
-		    ###Sending not filledmessage#########
-	        }else{
-    		    #######Setting up email notification
+            ###Sending not filledmessage#########
+            }else{
+                #######Setting up email notification
                 $message = "Your ILL request $reqnumb for $title can not be filled by $destlib.<br> <br>$respnote<br><br> <a href='https://duenorth.nnyln.org'>Would you like to try a different library</a>?";
                #######Setup php email headers
                 $to=$requesterEMAIL;
-                $subject = "ILL Request Not Filled ILL# $reqnumb  ";
+                $subject = "UNFILLED ILL Request ILL# $reqnumb ";
                 #####SEND requester an email to let them know the request will be filled
                 $message = preg_replace('/(?<!\r)\n/', "\r\n", $message);
                 $headers = preg_replace('/(?<!\r)\n/', "\r\n", $headers);
                 mail($to, $subject, $message, $headers);
 
-	    }
+        }
        }else{
-          echo "Unable to record answer for ILL request $reqnumb please call NNYLN to report this error";
+          echo "Unable to record answer for ILL request $reqnumb please call SENYLRC to report this error";
        }
 ####No notes but answering yes or no to ILL request#########
 }else{
    ###################The Request will be filled##############################################
-   if ($reqanswer=='1'){
+   if ($reqanswer=='1') {
        $sqlupdate = "UPDATE `seal`.`SENYLRC-SEAL2-STATS` SET `Fill` =  '1' WHERE `illNUB` = '$reqnumb'";
        if (mysqli_query($db, $sqlupdate)) {
         ########Generate web message
@@ -96,14 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
         ?>
        <br><br><h4>Please note the delivery method, tracking info, special handling, etc)</h4>
        <form action="/respond" method="post">
-       <input type='hidden' name='num' value= '<? echo $reqnumb ?>' '>
-	   <input type='hidden' name='fill' value='1'>
+       <input type='hidden' name='num' value= '<?php echo $reqnumb ?>' '>
+       <input type='hidden' name='fill' value='1'>
        <textarea name='respondnote' rows="4" cols="50"></textarea><br>
        <input type="submit" value="Submit">
        </form>
        <?php
        ########This will generate an error if database can't be updated########
-       }else{
+       } else {
          echo "Unable to record answer for ILL request $reqnumber please call NNYLN to report this error";
       }
    #########The request will not be filled###########################
@@ -112,15 +108,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')  {
        if (mysqli_query($db, $sqlupdate)) {
           ####Generate web message
           echo "Please click the submit button to confirm you can not fill the request";
-		   ?>
+           ?>
           <br><br><h4>Would you like to add a note about the decline?<br> </h4>
           <form action="/respond" method="post">
-          <input type='hidden' name='num' value= '<? echo $reqnumb ?>' '>
-	      <input type='hidden' name='fill' value='0'>
+          <input type='hidden' name='num' value= '<?php echo $reqnumb ?>' '>
+          <input type='hidden' name='fill' value='0'>
           <textarea name='respondnote' rows="4" cols="50"></textarea><br>
           <input type="submit" value="Submit">
            </form>
-		   <?php
+           <?php
        ####Generate an error if database can't be updated#####
        }else{
           echo "Unable to record answer for ILL request $reqnumb please call NNYLN to report this error";

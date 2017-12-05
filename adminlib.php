@@ -66,10 +66,12 @@ if ($pageaction ==3){
     $rec_count = $row[0];
     $GETLIST = mysqli_query($db, $GETLISTSQL1);
     $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
-    echo "<a href='adminlib?action=1'>Would you like to add a library?</a><br>";
-    echo "<a href='adminlib?action=4'>Would you like to search for a library?</a><br><br>";
+    echo "<a href='adminlib?action=1'>Add a library</a><br>";
+    echo "<a href='adminlib?action=4'>Search for a library</a><br>";
+    echo "<a href='adminlib?action=5'>Mass suspend or activate library lending</a><br><br>";
     echo " $GETLISTCOUNTwhole  results";
     echo "<table><tr><th>Library</th><th>Alias</th><th>Phone</th><th>Participant</th><th>Suspend</th><th>System</th><th>OCLC</th><th>ILL</th><th>Action</th></tr>";
+    $rowtype=1;
     while ($row = mysqli_fetch_assoc($GETLIST)) {
       $librecnumb = $row["recnum"];
       $libname = $row["Name"];
@@ -84,29 +86,35 @@ if ($pageaction ==3){
       if($libsuspend=="0") $libsuspend="No";
       if($libparticipant =="1") $libparticipant ="Yes";
       if($libparticipant =="0") $libparticipant ="No";
-      echo " <Tr><Td>$libname</td><td>$libalias</td><td>$phone</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
-      echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+      if ($rowtype & 1 ) {
+        echo "<tr class='odd'><Td>$libname</td><td>$libalias</td><td>$phone</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+        echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+      } else {
+        echo "<tr class='even'><Td>$libname</td><td>$libalias</td><td>$phone</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+        echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+      }
+      $rowtype=$rowtype+1;
     }
     echo "</table>";
   }else{
     #Preset form for search criteria?>
-    <h2>Enter the criteria you want to search:</h2>
+    <h3>Enter the criteria you want to search:</h3>
     <form action="/adminlib?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
     <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
     <B>Library Alias:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libalias"><br>
     <B>Library ILL Email:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libemail"><br>
-    <B>Library ILL participant</b><select name="participant"><option value=""></option> <option value="1">Yes</option><option value="0">No</option></select><br>
-    <B>Suspend ILL</b><select name="suspend"><option value=""></option><option value="0">No</option><option value="1">Yes</option></select><br>
-    <B>Library System</b><select name="system">
+    <B>Library ILL participant </b><select name="participant"><option value=""></option> <option value="1">Yes</option><option value="0">No</option></select><br>
+    <B>Suspend ILL </b><select name="suspend"><option value=""></option><option value="0">No</option><option value="1">Yes</option></select><br>
+    <B>Library System </b><select name="system">
       <option value=""></option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
-<option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+<option value = "JLHO">Jefferson-Lewis School Library System</option>
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
+<option value = "SLL">St. Lawrence-Lewis School Library System</option>
     </select>
     <br>
     <input type="submit" value="Submit">
@@ -142,6 +150,7 @@ if ($pageaction ==3){
   }else{
     ?>
     <form action="/adminlib?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
+    <h3>Add a Library</h3>
     <B>Library Name:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libname"><br>
     <B>Library Alias:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libalias"><br>
     <B>Library ILL Email:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="libemail"><br>
@@ -151,18 +160,19 @@ if ($pageaction ==3){
     <B>City State Zip:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address3"><br>
     <B>OCLC Symbol:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="oclc"><br>
     <B>ILL Code:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc"><br>
-    <B>Library ILL participant</b><select name="participant">  <option value="1">Yes</option><option value="0">No</option></select><br>
-    <B>Suspend ILL</b><select name="suspend">  <option value="0">No</option><option value="1">Yes</option></select><br>
-    <B>Library System</b><select name="system">
+    <B>Library ILL participant </b><select name="participant">  <option value="1">Yes</option><option value="0">No</option></select><br>
+    <B>Suspend ILL </b><select name="suspend">  <option value="0">No</option><option value="1">Yes</option></select><br>
+    <B>Library System </b><select name="system">
+<option value=""></option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
-<option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH">Franklin-Essex-Hamilton  School Library System</option>
+<option value = "JLHO">Jefferson-Lewis School Library System</option>
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
-      <B>Items Willing to loan in SEAL</b><br>
+<option value = "SLL">St. Lawrence-Lewis School Library System</option></select><br>
+      <B>Items Willing to loan in DueNorth</b><br>
         <ul>
         <li><b>Print Book</b>
           <input type="radio" name="book" value="1" checked> Yes
@@ -182,7 +192,7 @@ if ($pageaction ==3){
         </li>
         <li><b>Electronic Book</b>
           <input type="radio" name="ebook" value="1" > Yes
-          <input type="radio" name="ebook" value="0" checked>> No <br>
+          <input type="radio" name="ebook" value="0" checked> No <br>
         </li>
       </ul>
       <br>
@@ -248,19 +258,19 @@ if ($pageaction ==3){
     <B>City State Zip:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="address3" value="<?php echo $address3?>"><br>
     <B>OCLC Symbol:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="oclc" value="<?php echo $oclc?>"><br>
     <B>LOC Location:</b> <input type="text" SIZE=60 MAXLENGTH=255  name="loc" value="<?php echo $loc?>"><br>
-    <B>Library ILL participant</b><select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
-    <B>Suspend ILL</b><select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
-    <B>Library System</b><select name="system">
+    <B>Library ILL participant </b> <select name="participant">  <option value="1" <?php if($libparticipant=="1") echo "selected=\"selected\""; ?>>Yes</option><option value="0" <?php if($libparticipant=="0") echo "selected=\"selected\""; ?>>No</option></select><br>
+    <B>Suspend ILL </b> <select name="suspend">  <option value="0" <?php if($libsuspend=="0") echo "selected=\"selected\""; ?>>No</option><option value="1" <?php if($libsuspend=="1") echo "selected=\"selected\""; ?>>Yes</option></select><br>
+    <B>Library System </b> <select name="system">
 <option value = "CVES" <?php if($system=="CVES") echo "selected=\"selected\""; ?>>Champlain Valley Education Services School Library System</option>
 <option value = "CEFL" <?php if($system=="CEFL") echo "selected=\"selected\""; ?>>Clinton Essex Franklin Library System</option>
-<option value = "FEH" <?php if($system=="FEH") echo "selected=\"selected\""; ?>>Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO" <?php if($system=="JLHO") echo "selected=\"selected\""; ?>>Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH" <?php if($system=="FEH") echo "selected=\"selected\""; ?>>Franklin-Essex-Hamilton School Library System</option>
+<option value = "JLHO" <?php if($system=="JLHO") echo "selected=\"selected\""; ?>>Jefferson-Lewis School Library System</option>
 <option value = "NCLS" <?php if($system=="NCLS") echo "selected=\"selected\""; ?>>North Country Library System</option>
 <option value = "NNYLN" <?php if($system=="NNYLN") echo "selected=\"selected\""; ?>>Northern New York Library Network</option>
 <option value = "OSW" <?php if($system=="OSW") echo "selected=\"selected\""; ?>>Oswego County School Library System at CiTi</option>
-<option value = "SLL" <?php if($system=="SLL") echo "selected=\"selected\""; ?>>St. Lawrence-Lewis BOCES School Library System</option>
+<option value = "SLL" <?php if($system=="SLL") echo "selected=\"selected\""; ?>>St. Lawrence-Lewis School Library System</option>
     </select><br><br>
-    <B>Items willing to loan in SEAL</b><br>
+    <B>Items willing to loan in DueNorth</b><br>
       <table>
       <tr>
       <td><b>Print Book</b><td>
@@ -292,13 +302,34 @@ if ($pageaction ==3){
     </form>
     <?php
   }
+}elseif($pageaction ==5){
+  #Suspend and Unsuspend en masse
+  ?>
+  <p>Please select the action you wish to take and the library system to act upon.</p>
+  <form action="/status-confirmation" method="post">
+  <input type="radio" name="task" value="suspend">Suspend lending<br>
+  <input type="radio" name="task" value="activate" checked="checked">Activate lending<br><br>
+  <b>Library System </b><select name="system">
+  <option value = "none">Select a system</option>
+  <option value = "CVES">Champlain Valley Education Services School Library System</option>
+  <option value = "CEFL">Clinton Essex Franklin Library System</option>
+  <option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+  <option value = "JLHO">Jefferson-Lewis School Library System</option>
+  <option value = "NCLS">North Country Library System</option>
+  <option value = "NNYLN">Northern New York Library Network</option>
+  <option value = "OSW">Oswego County School Library System at CiTi</option>
+  <option value = "SLL">St. Lawrence-Lewis School Library System</option></select><br>
+  <br><br>
+  <input type="submit" value="Submit">
+  </form>
+  <?php
 }else{
-  #By defualt show all libraries in a browse list
+  #By default show all libraries in a browse list
   $GETLISTSQL="SELECT * FROM `$sealLIB` ORDER BY Name Asc";
   $retval = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNTwhole = mysqli_num_rows ($retval);
   #limit 10 libraries per page
-  $rec_limit = 10;
+  $rec_limit = 25;
   $pagerow = mysqli_fetch_array($retval, MYSQLI_NUM );
   #Setting up Pagination
   $rec_count = $pagerow[0];
@@ -311,14 +342,16 @@ if ($pageaction ==3){
   }
   $left_rec = $rec_count - ($page * $rec_limit);
   $GETLISTSQL="$GETLISTSQL LIMIT $offset, $rec_limit";
-  #Get the actual 10 libraries for the page we are browsing
+  #Get the actual 25 libraries for the page we are browsing
   $GETLIST = mysqli_query($db, $GETLISTSQL);
   $GETLISTCOUNT = mysqli_num_rows ($GETLIST);
   #Display the result as html for user with action
-  echo "<a href='adminlib?action=1'>Would you like to add a library?</a><br>";
-  echo "<a href='adminlib?action=4'>Would you like to search for a library?</a><br><br>";
+  echo "<a href='adminlib?action=1'>Add a library</a><br>";
+  echo "<a href='adminlib?action=4'>Search for a library</a><br>";
+  echo "<a href='adminlib?action=5'>Mass suspend or activate library lending</a><br><br>";
   echo "$GETLISTCOUNTwhole results";
   echo "<table><tr><th>Library</th><th>Alias</th><th>Participant</th><th>Suspend</th><th>System</th><th>OCLC</th><th>ILL</th><th>Action</th></tr>";
+  $rowtype=1;
     while ($row = mysqli_fetch_assoc($GETLIST)) {
         $librecnumb = $row["recnum"];
         $libname = $row["Name"];
@@ -332,20 +365,26 @@ if ($pageaction ==3){
         if($libsuspend=="0") $libsuspend="No";
         if($libparticipant =="1") $libparticipant ="Yes";
         if($libparticipant =="0") $libparticipant ="No";
-        echo " <Tr><Td>$libname</td><td>$libalias</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
-        echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+        if ($rowtype & 1 ) {
+          echo "<tr class='odd'><Td>$libname</td><td>$libalias</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+          echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+        } else {
+          echo "<tr class='even'><Td>$libname</td><td>$libalias</td><td>$libparticipant</td><td>$libsuspend</td><td>$system</td><td>$oclc</td><td>$loc</td> ";
+          echo "<td><a href='adminlib?action=2&librecnumb=$librecnumb'>Edit</a>  <a href='adminlib?action=3&librecnumb=$librecnumb''>Delete</a> </td></tr>";
+        }
+        $rowtype = $rowtype + 1;
      }
   echo "</table>";
   #Show pagination links under the data that has been displayed
    if(( $page > 0 ) && (($offset +  $rec_limit)<$GETLISTCOUNTwhole)){
      $last = $page - 2;
-     echo "<a href='adminlib?page=$last\'>Last 10 Records</a> |";
-     echo "<a href='adminlib?page=$page\'>Next 10 Records</a>";
+     echo "<a href='adminlib?page=$last\'>Last 25 Records</a> |";
+     echo "<a href='adminlib?page=$page\'>Next 25 Records</a>";
    }else if (( $page == 0 ) && ( $GETLISTCOUNTwhole  > $rec_limit )){
-     echo "<a href='adminlib?page=$page\'>Next 10 Records</a>";
+     echo "<a href='adminlib?page=$page\'>Next 25 Records</a>";
    }else if ($GETLISTCOUNTwhole > $rec_limit){
      $last = $page - 2;
-    echo "<a href='adminlib?page=$last\'>Last 10 Records</a>";
+    echo "<a href='adminlib?page=$last\'>Last 25 Records</a>";
   }
 }
 ?>

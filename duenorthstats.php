@@ -86,20 +86,20 @@ if (strcmp($libsystem,'CVES')==0){
 }else if (strcmp($libsystem,'CEFL')==0){
     $libsystemtxt = "Clinton Essex Franklin Library System";
 }else if (strcmp($libsystem,'FEH')==0){
-    $libsystemtxt = "Franklin-Essex-Hamilton BOCES School Library System";
+    $libsystemtxt = "Franklin-Essex-Hamilton School Library System";
 }else if (strcmp($libsystem,'NCLS')==0){
     $libsystemtxt = "North Country Library System";
 }else if (strcmp($libsystem,'OSW')==0){
     $libsystemtxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($libsystem,'SLL')==0){
-    $libsystemtxt = "St. Lawrence-Lewis BOCES School Library System";
+    $libsystemtxt = "St. Lawrence-Lewis School Library System";
 }else{
    $libsystemtxt = "Northern New York Library Network";
    }
 
     #Stats overall in the time frame chosen
-    echo "<h1><center>DueNorth Stats from $startdated to $enddated </h1></center>";
-    echo "<h1>Library System ".$libsystemtxt." </h1>";
+    echo "<h1>DueNorth Stats from $startdated to $enddated </h1>";
+    echo "<br><h3>Library System ".$libsystemtxt." </h3>";
     echo "Total Request ".$row_cnt." <br>";
     echo "Number of Request Filled: ".$row_fill." (".$percent_friendly_fill.")<br>";
     echo "Number of Request Not Filled: ".$row_notfill." (".$percent_friendly_notfill.")<br>";
@@ -130,13 +130,13 @@ if (strcmp($dessysvar,'CVES')==0){
 }else if (strcmp($dessysvar,'CEFL')==0){
     $dessysvartxt = "Clinton Essex Franklin Library System";
 }else if (strcmp($dessysvar,'FEH')==0){
-    $dessysvartxt = "Franklin-Essex-Hamilton BOCES School Library System";
+    $dessysvartxt = "Franklin-Essex-Hamilton School Library System";
 }else if (strcmp($dessysvar,'NCLS')==0){
     $dessysvartxt = "North Country Library System";
 }else if (strcmp($dessysvar,'OSW')==0){
     $dessysvartxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($dessysvar,'SLL')==0){
-    $dessysvartxt = "St. Lawrence-Lewis BOCES School Library System";
+    $dessysvartxt = "St. Lawrence-Lewis School Library System";
 }else{
    $dessysvartxt = "Northern New York Library Network";
    }
@@ -292,33 +292,32 @@ if (strcmp($dessysvar,'CVES')==0){
     }
   }else{
       ?>
-     <h2>Enter the data range you will like to run DueNorth stats usage:</h2>
+     <h3>Enter your desired date range:</h3>
      <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
      Start Date:
      <input id="datepicker" name="startdate"/>
      End Date:
      <input id="datepicker2" name="enddate"/>
-     <br><br>
-     <B>Requesting Library System</b><select name="system">
+     <br><br>Requesting Library System: <select name="system">
                     <option value="">All</option>
 <option value = "CVES">Champlain Valley Education Services School Library System</option>
 <option value = "CEFL">Clinton Essex Franklin Library System</option>
-<option value = "FEH">Franklin-Essex-Hamilton BOCES School Library System</option>
-<option value = "JLHO">Jefferson-Lewis BOCES School Library System</option>
+<option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
+<option value = "JLHO">Jefferson-Lewis School Library System</option>
 <option value = "NCLS">North Country Library System</option>
 <option value = "NNYLN">Northern New York Library Network</option>
 <option value = "OSW">Oswego County School Library System at CiTi</option>
-<option value = "SLL">St. Lawrence-Lewis BOCES School Library System</option>
+<option value = "SLL">St. Lawrence-Lewis School Library System</option>
      <input type="hidden" name="stattype" value="wholesystem">
      <input type="submit" value="Submit">
     </form>
-    <br><hr>
+    <br>
     <?php
     #Generate the drop down for borrower stats
     $libnames= "SELECT loc,Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `participant`=1 order by `Name` ";
     $libnameq =   mysqli_query($db, $libnames);
     echo "<form action='/libstats'   method='post2' >";
-    echo "<h2>Generate borrowing stats for a specific Library:</h2><br>";
+    echo "<h3>Generate borrowing stats for a specific library:</h3>";
     echo "<select name=libname>";
     while($row = $libnameq->fetch_assoc()) {
       $libname =  $row["Name"];
@@ -327,12 +326,11 @@ if (strcmp($dessysvar,'CVES')==0){
     }
     echo "<input type='submit' value='Submit'>";
     echo "</select></form>";
-    echo "<hr>";
     #Generating the links for borrowing stats
     $libnames= "SELECT loc,Name FROM `SENYLRC-SEAL2-Library-Data` WHERE `participant`=1 order by `Name` ";
     $libnameq =   mysqli_query($db, $libnames);
     echo "<form action='/liblenderstat'   method='post2' >";
-    echo "<h2>Generate lending stats for a specific Library:</h2><br>";
+    echo "<h3>Generate lending stats for a specific library:</h3>";
     echo "<select name=libname>";
     while($row = $libnameq->fetch_assoc()) {
       $libname =  $row["Name"];
@@ -342,9 +340,8 @@ if (strcmp($dessysvar,'CVES')==0){
     echo "<input type='submit' value='Submit'>";
     echo "</select></form>";
     ?>
-    <hr>
     <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h2>Generate list of expired requests:</h2><br>
+    <h3>Generate list of expired requests:</h3>
      Start Date:
      <input id="expdatepicker" name="startdate"/>
      End Date:
@@ -352,9 +349,8 @@ if (strcmp($dessysvar,'CVES')==0){
      <input type="hidden" name="stattype" value="expirestats">
      <input type="submit" value="Submit">
     </form>
-    <hr>
     <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h2>Generate list of top 10 libraries making requests:</h2><br>
+    <h3>Generate list of top 10 libraries making requests:</h3>
     Start Date:
     <input id="top10datepicker" name="startdate"/>
     End Date:
@@ -362,9 +358,8 @@ if (strcmp($dessysvar,'CVES')==0){
     <input type="hidden" name="stattype" value="top10stats">
     <input type="submit" value="Submit">
     </form>
-	  <hr>
     <form action="duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
-    <h2>Generate list of top 10 libraries filling requests:</h2><br>
+    <h3>Generate list of top 10 libraries filling requests:</h3>
     Start Date:
     <input id="top10fdatepicker" name="startdate"/>
     End Date:
