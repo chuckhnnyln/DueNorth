@@ -22,6 +22,8 @@ global $user;   // load the user entity so to pick the field from.
 $user_contaning_field = user_load($user->uid);  // Check if we're dealing with an authenticated user
 if($user->uid) {    // Get field value;
   $AuthedUser=1;
+} else {
+  $AuthedUser=0;
 }
 
 if ( ($_SERVER['REQUEST_METHOD'] == 'POST')   || ( isset($_GET{'page'}))  ) {

@@ -162,6 +162,7 @@ while ($row = mysqli_fetch_assoc($retval)) {
     #SEND EMAIL to Detestation Library with DKIM sig
     $email_to = implode(',', $destemailarray);
     $headers = "From: DueNorth <duenorth@nnyln.org>\r\n" ;
+    $headers .= "Reply-to: " . $email . "\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
@@ -169,6 +170,7 @@ while ($row = mysqli_fetch_assoc($retval)) {
 
     #SEND a copy of EMAIL to requester with DKIM sig
     $headers = "From: DueNorth <duenorth@nnyln.org>\r\n" ;
+    $headers .= "Reply-to: " . $email_to . "\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
