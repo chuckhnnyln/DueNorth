@@ -323,6 +323,7 @@ if (strcmp($dessysvar,'CVES')==0){
     }
   }else{
       ?>
+      <p>Looking for ICICILL-style old school statistics? <a href="old-school-stats">Try this screen!</a>
      <h3>Enter your desired date range:</h3>
      <form action="/duenorthstats?<?php echo $_SERVER['QUERY_STRING'];?>" method="post">
      Start Date:

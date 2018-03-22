@@ -112,13 +112,13 @@ if (isset($_REQUEST['csv'])) {
 
 #Show filter options
 echo "<h3>Enter your desired date range:</h3>";
-echo "<form method='post' action='testing'>";
+echo "<form method='post' action='old-school-stats'>";
 echo "Start Date:";
 echo "<input id='datepicker' value = " . $startdate . " name='startdate'/>";
 echo " End Date:";
 echo "<input id='datepicker2' value = " . $enddate . "  name='enddate'/>";
 echo " <input name='csv' type='checkbox' " . checked("on",$csv) . "> Generate CSV?";
-echo " <a href='testing'>Clear</a>";
+echo " <a href='old-school-stats'>Clear</a>";
 echo "<br><br>Requesting Library System: <select name='libsystem'>";
 echo "<option value='' " . selected("",$libsystem) . ">None</option>";
 echo "<option value = 'CVES' " . selected("CVES",$libsystem) . ">Champlain Valley Education Services School Library System</option>";
