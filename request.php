@@ -268,7 +268,6 @@ foreach ($records->location as $location) { #Locations loop start
   $urlrecipe = $location->{'md-url_recipe'};
   $mdid = $location->{'md-id'};
   foreach ($location->holdings->holding as $holding) { #generic holding loop start
-    $loccount=$loccount+1;
     $itemavail=$holding->localAvailability;
     $itemavail=normalize_availability($itemavail); #0=No, 1=Yes
     $itemavailtext=set_availability($itemavail);
@@ -318,6 +317,7 @@ foreach ($records->location as $location) { #Locations loop start
       $itemcallnum= preg_replace('/[:]/', ' ' , $itemcallnum);
       echo"<div class='multiplereq'><input type='checkbox' class='librarycheck' name='destination[]' value='". $itemlocation .":".$destlibname.":".$destlibsystem.":".$itemavailtext.":".$itemcallnum.":".$itemlocallocation.":".$destemail.":".$destill."'><strong>".$destlibname."</strong> (".$destlibsystem."), Availability: $itemavailtext, Call Number:$itemcallnum  </br></div>";
       echo"<div class='singlereq'><input type='radio' class='librarycheck' name='destination[]' value='". $itemlocation .":".$destlibname.":".$destlibsystem.":".$itemavailtext.":".$itemcallnum.":".$itemlocallocation.":".$destemail.":".$destill."'><strong>".$destlibname."</strong> (".$destlibsystem."), Availability: $itemavailtext, Call Number:$itemcallnum  </br></div>";
+      $loccount=$loccount+1;
     } else {
       echo "<!-- Holding location failed checks. --> \n";
     }

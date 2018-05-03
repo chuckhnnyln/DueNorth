@@ -2,6 +2,7 @@
 ###borrower-history.php###
 
 function build_notes($reqnote,$lendnote) {
+  $displaynotes = "";
   if ( (strlen($reqnote) > 2) && (strlen($lendnote) > 2) ) {
     $displaynotes = $reqnote . "</br>Lender Note: " . $lendnote;
   }
@@ -51,14 +52,14 @@ if (isset($_GET['loc'])) {
       $filter_days="all";
       $filter_destination="";
     } else {
-    if (isset($_REQUEST['filter_yes'])) $filter_yes = $_REQUEST['filter_yes'];
-    if (isset($_REQUEST['filter_no'])) $filter_no = $_REQUEST['filter_no'];
-    if (isset($_REQUEST['filter_noans'])) $filter_noans = $_REQUEST['filter_noans'];
-    if (isset($_REQUEST['filter_expire'])) $filter_expire = $_REQUEST['filter_expire'];
-    if (isset($_REQUEST['filter_cancel'])) $filter_cancel = $_REQUEST['filter_cancel'];
-    if (isset($_REQUEST['filter_days'])) $filter_days = $_REQUEST['filter_days'];
-    if (isset($_REQUEST['filter_destination'])) $filter_destination = $_REQUEST['filter_destination'];
-    if (isset($_REQUEST['filter_illnum'])) $filter_illnum = $_REQUEST['filter_illnum'];
+      $filter_yes = (isset($_REQUEST['filter_yes']) ? $_REQUEST['filter_yes'] : "");
+      $filter_no = (isset($_REQUEST['filter_no']) ? $_REQUEST['filter_no'] : "");
+      $filter_noans = (isset($_REQUEST['filter_noans']) ? $_REQUEST['filter_noans'] : "");
+      $filter_expire = (isset($_REQUEST['filter_expire']) ? $_REQUEST['filter_expire'] : "");
+      $filter_cancel = (isset($_REQUEST['filter_cancel']) ? $_REQUEST['filter_cancel'] : "");
+      $filter_days = (isset($_REQUEST['filter_days']) ? $_REQUEST['filter_days'] : "");
+      $filter_destination = (isset($_REQUEST['filter_destination']) ? $_REQUEST['filter_destination'] : "");
+      $filter_illnum = (isset($_REQUEST['filter_illnum']) ? $_REQUEST['filter_illnum'] : "");
     }
   } else {
     $loc='null';
@@ -107,6 +108,8 @@ if ($filter_days == "all") {
 
 if (strlen($filter_illnum) > 2 ) {
   $SQLILL = " AND `illNUB` = '" . $filter_illnum . "'";
+} else {
+  $SQLILL = "";
 }
 
 if (strlen($filter_destination) > 2 ) {
@@ -121,6 +124,8 @@ if (strlen($filter_destination) > 2 ) {
     }
   }
   $SQL_DESTINATION = $SQL_DESTINATION . ")";
+} else {
+  $SQL_DESTINATION = "";
 }
 
 $SQLMIDDLE ='';
