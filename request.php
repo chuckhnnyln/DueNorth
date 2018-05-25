@@ -140,6 +140,9 @@ function normalize_availability($itemavail) {
     case "Available":
       return 1;
       break;
+    case "CheckedIn":
+      return 1;
+      break;
     default:
       return 0;
   }
@@ -271,8 +274,8 @@ foreach ($records->location as $location) { #Locations loop start
     $itemavail=$holding->localAvailability;
     $itemavail=normalize_availability($itemavail); #0=No, 1=Yes
     $itemavailtext=set_availability($itemavail);
-    if ( ($catalogtype == "Horizon") || ($catalogtype == "OPALS") ) $itemavailtext="UNKNOWN"; #Availability not possible on these systems.
-    if ( ($catalogtype == "Horizon") || ($catalogtype == "OPALS") ) $itemavail=1; #Availability not possible on these systems.
+    if ($catalogtype == "OPALS") $itemavailtext="UNKNOWN"; #Availability not possible on these systems.
+    if ($catalogtype == "OPALS") $itemavail=1; #Availability not possible on these systems.
     $itemcallnum=$holding->callNumber;
     $itemcallnum=htmlspecialchars($itemcallnum,ENT_QUOTES); #Sanitizes callnumbers with special characters in them
     $itemlocation=$holding->localLocation; #Gets the alias
