@@ -29,22 +29,30 @@ function selected($days,$filter_value) {
   return $filterout;
 }
 
-function displaymodenav($task,$pagemode,$loc,$target) {
+function displaymodenav($task,$pagemode,$loc,$target,$hasnew) {
   if ($task == "lend") {
     echo "<br>";
     switch ($pagemode) {
-      case 0:
-        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>new</a> : ";
+      case 0: #Open
+        if ($hasnew == "1") {
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>{{new}}</a> : ";
+        } else {
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>new</a> : ";
+        }
         echo "OPEN : ";
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'>complete</a>";
         break;
-      case 1:
+      case 1: #New
         echo "NEW : ";
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'>open</a> : ";
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'>complete</a>";
         break;
-      case 2:
-        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>new</a> : ";
+      case 2: #Complete
+        if ($hasnew == "1") {
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>{{new}}</a> : ";
+        } else {
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>new</a> : ";
+        }
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'>open</a> : ";
         echo "COMPLETE";
         break;

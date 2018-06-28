@@ -2,6 +2,10 @@
 #Request details
 $target = "testing";
 
+if (isset($_GET['print'])) {
+  echo "<script>window.print();</script>";
+}
+
 #Connect to database
 require '../seal_script/seal_db.inc';
 $db = mysqli_connect($dbhost, $dbuser, $dbpass);
@@ -66,20 +70,26 @@ if ( strlen($illNUB) > 2 ){
   }
 
   echo "<b>Request Number:</b> " . $illNUB;
-  echo "<br><b>Status:</b> " . $fillstatus;
+  echo "<span class='printhide'><br><b>Status:</b> " . $fillstatus . "</span>";
+  echo "<br>";
+  echo "<span class='embiggen'>";
   echo "<br><b>Title:</b> " . $title;
   echo "<br><b>Author:</b> " . $author;
+  echo "</span>";
+  echo "<br>";
   echo "<br><b>Item Type:</b> " . $itype;
   echo "<br><b>Publication Date:</b> " . $pubdate;
   if (strlen($reqisbn)>2) {echo "<br><b>ISBN: </b>" . substr($reqisbn,7);}
   if (strlen($reqissn)>2) {echo "<br><b>ISSN: </b>" . substr($reqissn,7);}
   echo "<br><b>Call Number:</b> " . $callnum;
   echo "<br><b>Location:</b> " . $location;
-  echo "<br><b>Availability (at time of request):</b> " . $availability;
+  echo "<span class='printhide'><br><b>Availability (at time of request):</b> " . $availability . "</span>";
+  echo "<br>";
   echo "<br><b>Need by date:</b> " . $needby;
   echo "<br><b>Timestamp: </b>" . $timestamp;
+  echo "<span class='screenhide'><b>Lender's Public Note: </b>" . $reqnote . "</span>";
   echo "<br>";
-  echo "<table><tr><th width='50%'>Borrower Information</th><th width='50%'>Lender Information</th></tr>";
+  echo "<table class='printhide'><tr><th width='50%'>Borrower Information</th><th width='50%'>Lender Information</th></tr>";
   echo "<tr><td valign='top'>";
   echo "<i>$reql</i>";
   echo "<br>" . $saddress;
@@ -110,9 +120,29 @@ if ( strlen($illNUB) > 2 ){
   if (strcasecmp($userloc, $destloc) == 0 ) {echo "<br>Private Note: " . $lenderprivate;}
   echo "</td></tr>";
   echo "</table>";
-  #echo "<br>" . $article;
+  echo "<span class='screenhide'>";
+  echo "<br><hr>Return this item to:<br><br>";
+  echo "<span class='embiggen'";
+  echo "<b><i>" . $lendername . "</i></b>";
+  if (strlen($lenderaddress1)>2) {echo "<br>$lenderaddress1";}
+  if (strlen($lenderaddress2)>2) {echo "<br>$lenderaddress2";}
+  if (strlen($lenderaddress3)>2) {echo "<br>$lenderaddress3";}
+  echo "<br>";
+  echo "<br>DueNorth ILL: <b>" . $destloc . "</b>";
+  echo "<br>Library System: " . $destsystem;
+  echo "</span>";
+  echo "<br>";
+  echo "<br><hr>Deliver this item to:<br><br>";
+  echo "<span class='embiggen'";
+  echo "<b><i>" . $reql . "</i></b>";
+  echo "<br>" . $saddress;
+  echo "<br>" . $caddress;
+  echo "<br>";
+  echo "<br>DueNorth ILL: <b>" . $reqloc . "</b>";
+  echo "<br>Library System: " . $reqsystem;
+  echo "</span>";
+  echo "</span>";
 } else {
   echo "Nothing to do!";
 }
-
 ?>
