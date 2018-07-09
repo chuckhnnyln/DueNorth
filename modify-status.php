@@ -60,9 +60,9 @@ if ( isset($_REQUEST['function']) ) {
     echo "<input type='hidden' name='illNUB' value= '$illNUB'>";
     echo "<input type='hidden' name='LenderStatus' value= '$LenderStatus'>";
     echo "<br>Lender Public Note: (Visible to the Borrower)<br>";
-    echo "<textarea name='$lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
+    echo "<textarea name='lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
     echo "Lender Private Note: (Visible only your library's staff)<br>";
-    echo "<textarea name='$lenderprivate' rows='4' cols='50'>$lenderprivate</textarea><br>";
+    echo "<textarea name='lenderprivate' rows='4' cols='50'>$lenderprivate</textarea><br>";
     echo "<input type='submit' value='Submit'>";
     echo "</form>";
   } else {
