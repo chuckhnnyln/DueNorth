@@ -30,31 +30,32 @@ function selected($days,$filter_value) {
 }
 
 function displaymodenav($task,$pagemode,$loc,$target,$hasnew) {
+  $imagepath = "/sites/duenorth.nnyln.org/files/interface/";
   if ($task == "lend") {
     echo "<br>";
     switch ($pagemode) {
       case 0: #Open
         if ($hasnew == "1") {
-          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>{{new}}</a> : ";
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'><img src='" . $imagepath . "tasks_new_burning.png'></a> ";
         } else {
-          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>new</a> : ";
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'><img src='" . $imagepath . "tasks_new_inactive.png'></a> ";
         }
-        echo "OPEN : ";
-        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'>complete</a>";
+        echo "<img src='" . $imagepath . "tasks_open_active.png'> ";
+        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'><img src='" . $imagepath . "tasks_complete_inactive.png'></a> ";
         break;
       case 1: #New
-        echo "NEW : ";
-        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'>open</a> : ";
-        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'>complete</a>";
+        echo "<img src='" . $imagepath . "tasks_new_active.png'> ";
+        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'><img src='" . $imagepath . "tasks_open_inactive.png'></a> ";
+        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'><img src='" . $imagepath . "tasks_complete_inactive.png'></a> ";
         break;
       case 2: #Complete
         if ($hasnew == "1") {
-          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>{{new}}</a> : ";
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'><img src='" . $imagepath . "tasks_new_burning.png'></a> ";
         } else {
-          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'>new</a> : ";
+          echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=1'><img src='" . $imagepath . "tasks_new_inactive.png'></a> ";
         }
-        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'>open</a> : ";
-        echo "COMPLETE";
+        echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'><img src='" . $imagepath . "tasks_open_inactive.png'></a> ";
+        echo "<img src='" . $imagepath . "tasks_complete_active.png'> ";
         break;
     }
   } else {

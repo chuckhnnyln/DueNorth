@@ -16,40 +16,57 @@ if($user->uid) {    // Get field value;
   $userloc = $item['value'];
 }
 
-$illNUB = (isset($_GET['illNUB']) ? $_GET['illNUB'] : "");
-$action = (isset($_GET['a']) ? $_GET['a'] : "");
+if ( isset($_REQUEST['function']) ) {
+  $illNUB = (isset($_REQUEST['illNUB']) ? $illNUB = $_REQUEST['illNUB'] : $illNUB = "");
+  $LenderStatus = (isset($_REQUEST['LenderStatus']) ? $LenderStatus = $_REQUEST['$LenderStatus'] : $LenderStatus ="");
+  $lendnote = (isset($_REQUEST['lendnote']) ? $lendnote = $_REQUEST['lendnote'] : $lendnote = "");
+  $lenderprivate = (isset($_REQUEST['lenderprivate']) ? $lenderprivate = $_REQUEST['lenderprivate'] : $lenderprivate = "");
+  #$lendnote = mysqli_real_escape_string ($lendnote);
+  #$lenderprivate = mysqli_real_escape_string ($lenderprivate);
+  echo $illNUB . "<br>";
+  echo $LenderStatus . "<br>";
+  echo $lendnote . "<br>";
+  echo $lenderprivate . "<br>";
+  #echo "<script type='text/javascript'>location.replace('/testing?loc=" . $userloc . "&pagemode=2');</script>";
+  } else {
+  $illNUB = (isset($_GET['illNUB']) ? $_GET['illNUB'] : "");
+  $action = (isset($_GET['a']) ? $_GET['a'] : "");
 
-if ( strlen($illNUB) > 2 ){
-  $sqlget = "SELECT LenderPrivate,responderNOTE,LenderStatus FROM seal.`SENYLRC-SEAL2-STATS` where `illNUB`= '$illNUB'";
-  $RequestDetails = mysqli_query($db,$sqlget);
-  while ($row = mysqli_fetch_assoc($RequestDetails)) {
-    $lendnote = $row["responderNOTE"];
-    $lenderprivate = $row["LenderPrivate"];
-    $LenderStatus = $row["LenderStatus"];
-  }
-  if ( strlen($action) > 0 ){
-    switch ($action) {
-      case "0": #Mark unsent
-        $LenderStatus = "";
-        break;
-      case "1": #Mark sent
-        $LenderStatus = "Sent";
-        break;
+  if ( strlen($illNUB) > 2 ){
+    $sqlget = "SELECT LenderPrivate,responderNOTE,LenderStatus FROM seal.`SENYLRC-SEAL2-STATS` where `illNUB`= '$illNUB'";
+    $RequestDetails = mysqli_query($db,$sqlget);
+    while ($row = mysqli_fetch_assoc($RequestDetails)) {
+      $lendnote = $row["responderNOTE"];
+      $lenderprivate = $row["LenderPrivate"];
+      $LenderStatus = $row["LenderStatus"];
     }
-    if ( $LenderStatus == "Sent" ) {
-      echo "Changing status of " . $illNUB . " to 'sent'.";
-    } else {
-      echo "Changing status of " . $illNUB . " to 'unsent'.";
+    if ( strlen($action) > 0 ){
+      switch ($action) {
+        case "0": #Mark unsent
+          $LenderStatus = "";
+          break;
+        case "1": #Mark sent
+          $LenderStatus = "Sent";
+          break;
+      }
+      if ( $LenderStatus == "Sent" ) {
+        echo "Changing status of " . $illNUB . " to 'sent'.";
+      } else {
+        echo "Changing status of " . $illNUB . " to 'unsent'.";
+      }
     }
+    echo "<form action='$target' method='post'>";
+    echo "<input type='hidden' name='function' value= 'Whee!'>";
+    echo "<input type='hidden' name='illNUB' value= '$illNUB'>";
+    echo "<input type='hidden' name='LenderStatus' value= '$LenderStatus'>";
+    echo "<br>Lender Public Note: (Visible to the Borrower)<br>";
+    echo "<textarea name='$lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
+    echo "Lender Private Note: (Visible only your library's staff)<br>";
+    echo "<textarea name='$lenderprivate' rows='4' cols='50'>$lenderprivate</textarea><br>";
+    echo "<input type='submit' value='Submit'>";
+    echo "</form>";
+  } else {
+    echo "Nothing to do!";
   }
-  echo "<form action='$target' method='post'>";
-  echo "<br>Lender Public Note: (Visible to the Borrower)<br>";
-  echo "<textarea name='$lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
-  echo "Lender Private Note: (Visible only your library's staff)<br>";
-  echo "<textarea name='$lenderprivate' rows='4' cols='50'>$lenderprivate</textarea><br>";
-  echo "<input type='submit' value='Submit'>";
-  echo "</form>";
-} else {
-  echo "Nothing to do!";
 }
 ?>

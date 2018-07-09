@@ -1,6 +1,7 @@
 <?php
 ###lender-task.php###
-$target = "testing";
+$target = "lender-tasks";
+$imagepath = "/sites/duenorth.nnyln.org/files/interface/";
 
 #Shared code between lender-tasks and borrow-tasks
 require '../seal_script/_tasks.php';
@@ -117,7 +118,7 @@ if ( $GetListCount > 0 ) {
     $dest=trim($dest);
     #Are there comments?
     if ( (strlen($lendnote)>2) || (strlen($reqnote)>2) || (strlen($lenderprivate)>2) ) {
-      $comments="<br>[C]";
+      $comments="<br><img src='/sites/duenorth.nnyln.org/files/interface/comment.png' width='20'>";
     } else {
       $comments="";
     }
@@ -141,27 +142,27 @@ if ( $GetListCount > 0 ) {
     switch ($fill) {
       case "Unsent":
         #Actions: Change response, edit public note
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'>[P]</a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>Mark Sent<br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>Answer No</a></TD></TR> ";
+        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>Mark Sent<br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>Answer No</a></TD></TR> ";
         break;
       case "No Fill":
         #Action: Edit public note
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'>[P]</a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>Edit Public Note</TD></TR> ";
+        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>Edit Public Note</TD></TR> ";
         break;
       case "Waiting":
         #Actions: Respond yes, respond no
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'>[P]</a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=1'>Yes</a><br><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>No</a></TD></TR> ";
+        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=1'>Yes</a><br><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>No</a></TD></TR> ";
         break;
       case "Sent":
         #Actions: Reopen
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'>[P]</a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>Mark Unsent</TD></TR> ";
+        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>Mark Unsent</TD></TR> ";
         break;
       case "Expired":
         #Actions: None
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'>[P]</a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
+        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
         break;
       case "Canceled":
         #Actions None
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'>[P]</a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
+        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
         break;
     }
     $rowtype = $rowtype + 1;
