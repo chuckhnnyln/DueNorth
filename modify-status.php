@@ -23,11 +23,14 @@ if ( isset($_REQUEST['function']) ) {
   $LenderStatus = (isset($_REQUEST['LenderStatus']) ? $LenderStatus = $_REQUEST['LenderStatus'] : $LenderStatus = "");
   $lendnote = (isset($_REQUEST['lendnote']) ? $lendnote = $_REQUEST['lendnote'] : $lendnote = "");
   $lenderprivate = (isset($_REQUEST['lenderprivate']) ? $lenderprivate = $_REQUEST['lenderprivate'] : $lenderprivate = "");
+  $lendnote = mysqli_real_escape_string($db,$lendnote);
+  $lenderprivate = mysqli_real_escape_string($db,$lenderprivate);
   $sqlupdate = "UPDATE seal.`SENYLRC-SEAL2-STATS` SET LenderPrivate = '$lenderprivate', responderNOTE = '$lendnote', LenderStatus = '$LenderStatus' where `illNUB`= '$illNUB'";
   if (mysqli_query($db, $sqlupdate)) {
     echo "<script type='text/javascript'>location.replace('/lender-tasks?loc=" . $userloc . "&pagemode=0');</script>";
   } else {
-    echo "Ooops, something went wrong! Please contact the NNYLN office for help.";
+    echo "Ooops, something went wrong! Please contact the NNYLN office for help.<br><br>";
+    echo $sqlupdate;
   }
 } else {
   #This is presenting the update form.

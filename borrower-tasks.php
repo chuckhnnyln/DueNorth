@@ -25,9 +25,9 @@ if($user->uid) {    // Get field value;
 if (isset($_GET['loc'])) {
   $loc = $_GET['loc'];
   $pagemode = (isset($_REQUEST['pagemode']) ? $_REQUEST['pagemode'] : "0");
-  $filter_yes="";
+  $filter_yes="yes";
   $filter_no="yes";
-  $filter_noans="";
+  $filter_noans="yes";
   $filter_expire="yes";
   $filter_cancel="yes";
   $filter_sent="yes";
@@ -48,41 +48,43 @@ if (isset($_GET['loc'])) {
 displaymodenav("borrow",$pagemode,$loc,$target,$hasnew);
 
 #Filter options
-if ($pagemode != 1) {
-  echo "<form action='$target' method='post'>";
-  echo "<input type='hidden' name='loc' value= '$loc'>";
-  echo "<input type='hidden' name='pagemode' value= '$pagemode'>";
-  echo "<p>Display Requests ";
-  if ($pagemode != 0) {
-    echo "<input type='checkbox' name='filter_sent' value='yes' " . checked($filter_sent) . ">Sent  ";
-    echo "<input type='checkbox' name='filter_no' value='yes' " . checked($filter_no) . ">No Fill  ";
-    echo "<input type='checkbox' name='filter_expire' value='yes' " . checked($filter_expire) . ">Expired  ";
-    echo "<input type='checkbox' name='filter_cancel' value='yes' " . checked($filter_cancel) . ">Canceled  ";
-  }
-  echo "for ";
-  echo "<select name='filter_days'>";
-  echo "<option value='14' " . selected("14",$filter_days) . ">14 days</option>";
-  echo "<option value='30' " . selected("30",$filter_days) . ">30 days</option>";
-  echo "<option value='60' " . selected("60",$filter_days) . ">60 days</option>";
-  echo "<option value='90' " . selected("90",$filter_days) . ">90 days</option>";
-  echo "<option value='all' " . selected("all",$filter_days) . ">all days</option>";
-  echo "</select> ";
-  echo "<a href='$target?loc=$loc&pagemode=$pagemode'>clear</a>  ";
-  echo "<input type=Submit value=Update><br>";
-  #echo "ILL # <input name='filter_illnum' type='text' value='$filter_illnum'>  ";
-  #echo "Destination <input name='filter_destination' type='text' value='$filter_destination'>";
-  echo "</p>";
-  echo "</form>";
+echo "<form action='$target' method='post'>";
+echo "<input type='hidden' name='loc' value= '$loc'>";
+echo "<input type='hidden' name='pagemode' value= '$pagemode'>";
+echo "<p>Display Requests ";
+if ($pagemode == 0) { #Open
+  echo "<input type='checkbox' name='filter_yes' value='yes' " . checked($filter_yes) . ">Yes  ";
+  echo "<input type='checkbox' name='filter_noans' value='yes' " . checked($filter_noans) . ">No Answer  ";
+  echo "<input type='checkbox' name='filter_sent' value='yes' " . checked($filter_sent) . ">Arrived  ";
 }
+if ($pagemode == 2) { #Complete
+  echo "<input type='checkbox' name='filter_expire' value='yes' " . checked($filter_expire) . ">Expired  ";
+  echo "<input type='checkbox' name='filter_cancel' value='yes' " . checked($filter_cancel) . ">Canceled  ";
+  echo "<input type='checkbox' name='filter_sent' value='yes' " . checked($filter_sent) . ">Returned  ";
+}
+echo "for ";
+echo "<select name='filter_days'>";
+echo "<option value='14' " . selected("14",$filter_days) . ">14 days</option>";
+echo "<option value='30' " . selected("30",$filter_days) . ">30 days</option>";
+echo "<option value='60' " . selected("60",$filter_days) . ">60 days</option>";
+echo "<option value='90' " . selected("90",$filter_days) . ">90 days</option>";
+echo "<option value='all' " . selected("all",$filter_days) . ">all days</option>";
+echo "</select> ";
+echo "<a href='$target?loc=$loc&pagemode=$pagemode'>clear</a>  ";
+echo "<input type=Submit value=Update><br>";
+#echo "ILL # <input name='filter_illnum' type='text' value='$filter_illnum'>  ";
+#echo "Destination <input name='filter_destination' type='text' value='$filter_destination'>";
+echo "</p>";
+echo "</form>";
 
-$getsql = buildsql("lend",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$filter_cancel,$filter_days,$filter_sent,$filter_noans,$sealSTAT);
-#echo "<br>" . $getsql;
+$getsql = buildsql("borrow",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$filter_cancel,$filter_days,$filter_sent,$filter_noans,$sealSTAT);
+echo "<br>" . $getsql;
 
 $Getlist = mysqli_query($db,$getsql);
 $GetListCount = mysqli_num_rows ($Getlist);
 if ( $GetListCount > 0 ) {
   echo "<br>$GetListCount results<br>";
-  echo "<table><TR><TH width='5%'>ILL #</TH><TH>&nbsp</TH><TH width='25%'>Title / Author</TH><TH>Need By</TH><TH>Borrower & Contact</TH><TH>Timestamp</TH><TH>Status</TH><TH width=10%>Actions</TH></TR>";
+  echo "<table><TR><TH width='5%'>ILL #</TH><TH>&nbsp</TH><TH width='25%'>Title / Author</TH><TH>Need By</TH><TH>Lender Destination & Contact</TH><TH>Timestamp</TH><TH>Borrower</TH><TH>Status</TH><TH width=10%>Actions</TH></TR>";
   $rowtype=1;
   while ($row = mysqli_fetch_assoc($Getlist)) {
     $illNUB = $row["illNUB"];
@@ -91,23 +93,24 @@ if ( $GetListCount > 0 ) {
     $reqnote = $row["reqnote"];
     $lendnote = $row["responderNOTE"];
     $needby = $row["needbydate"];
-    $lenderprivate = $row["LenderPrivate"];
+    $borrowerprivate = $row["BorrowerPrivate"];
     $dest = $row["Destination"];
     $reqp = $row["Requester person"];
-    $reql = $row["Requester lib"];
-    $reqemail = $row["requesterEMAIL"];
+    #$reql = $row["Requester lib"];
+    #$reqemail = $row["requesterEMAIL"];
     $timestamp = $row["Timestamp"];
     $fill = $row["Fill"];
-    if($fill=="1") $fill="Unsent";
+    if($fill=="1") $fill="Yes";
     if($fill=="0") $fill="No Fill";
-    if($fill=="3") $fill="Waiting";
+    if($fill=="3") $fill="No Answer";
     if($fill=="4") $fill="Expired";
     if($fill=="6") $fill="Canceled";
-    $lenderstatus = $row["LenderStatus"];
-    if ( $lenderstatus == "Sent" && $fill == "Unsent" ) $fill = "Sent";
+    $borrowerstatus = $row["BorrowerStatus"];
+    if($fill=="1" && $borrowerstatus=="Arrived") $fill="Arrived";
+    if($fill=="1" && $borrowerstatus=="Returned") $fill="Returned";
     $dest=trim($dest);
     #Are there comments?
-    if ( (strlen($lendnote)>2) || (strlen($reqnote)>2) || (strlen($lenderprivate)>2) ) {
+    if ( (strlen($lendnote)>2) || (strlen($reqnote)>2) || (strlen($borrowerprivate)>2) ) {
       $comments="<br><img src='/sites/duenorth.nnyln.org/files/interface/comment.png' width='20'>";
     } else {
       $comments="";
@@ -130,15 +133,15 @@ if ( $GetListCount > 0 ) {
     }
     #$displaynotes=build_notes($reqnote,$lendnote);
     switch ($fill) {
-      case "Unsent":
-        #Actions: Change response, edit public note
+      case "Yes":
+        #Actions: edit public note
         echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='/modify-status?illNUB=$illNUB&a=1'>Mark Sent</a><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>Answer No</a></TD></TR> ";
         break;
       case "No Fill":
         #Action: Edit public note
         echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='/modify-status?illNUB=$illNUB'>Edit Notes</a></TD></TR> ";
         break;
-      case "Waiting":
+      case "No Answer":
         #Actions: Respond yes, respond no
         echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=1'>Yes</a><br><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>No</a></TD></TR> ";
         break;
@@ -153,6 +156,12 @@ if ( $GetListCount > 0 ) {
       case "Canceled":
         #Actions None
         echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
+        break;
+      case "Arrived":
+        #Actions: mark returned, edit notes
+        break;
+      case "Returned":
+        #actions:
         break;
     }
     $rowtype = $rowtype + 1;
