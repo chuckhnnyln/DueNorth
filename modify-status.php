@@ -23,11 +23,17 @@ if ( isset($_REQUEST['function']) ) {
   $LenderStatus = (isset($_REQUEST['LenderStatus']) ? $LenderStatus = $_REQUEST['LenderStatus'] : $LenderStatus = "");
   $lendnote = (isset($_REQUEST['lendnote']) ? $lendnote = $_REQUEST['lendnote'] : $lendnote = "");
   $lenderprivate = (isset($_REQUEST['lenderprivate']) ? $lenderprivate = $_REQUEST['lenderprivate'] : $lenderprivate = "");
+  $source = (isset($_REQUEST['s']) ? $source = $_REQUEST['s'] : $source = "");
+  $borrowerstatus = (isset($_REQUEST['BorrowerStatus']) ? $borrowerstatus = $_REQUEST['BorrowerStatus'] : $borrowerstatus = "");
   $lendnote = mysqli_real_escape_string($db,$lendnote);
   $lenderprivate = mysqli_real_escape_string($db,$lenderprivate);
-  $sqlupdate = "UPDATE seal.`SENYLRC-SEAL2-STATS` SET LenderPrivate = '$lenderprivate', responderNOTE = '$lendnote', LenderStatus = '$LenderStatus' where `illNUB`= '$illNUB'";
+  $sqlupdate = "UPDATE seal.`SENYLRC-SEAL2-STATS` SET LenderPrivate = '$lenderprivate', responderNOTE = '$lendnote', LenderStatus = '$LenderStatus', BorrowerStatus = '$borrowerstatus' where `illNUB`= '$illNUB'";
   if (mysqli_query($db, $sqlupdate)) {
-    echo "<script type='text/javascript'>location.replace('/lender-tasks?loc=" . $userloc . "&pagemode=0');</script>";
+    if ($source == "borrow") {
+      echo "<script type='text/javascript'>location.replace('/borrower-tasks?loc=" . $userloc . "&pagemode=0');</script>";
+    } else {
+      echo "<script type='text/javascript'>location.replace('/lender-tasks?loc=" . $userloc . "&pagemode=0');</script>";
+    }
   } else {
     echo "Ooops, something went wrong! Please contact the NNYLN office for help.<br><br>";
     echo $sqlupdate;
@@ -36,34 +42,47 @@ if ( isset($_REQUEST['function']) ) {
   #This is presenting the update form.
   $illNUB = (isset($_GET['illNUB']) ? $_GET['illNUB'] : "");
   $action = (isset($_GET['a']) ? $_GET['a'] : "");
+  $source = (isset($_GET['s']) ? $_GET['s'] : "");
 
   if ( strlen($illNUB) > 2 ){
-    $sqlget = "SELECT LenderPrivate,responderNOTE,LenderStatus FROM seal.`SENYLRC-SEAL2-STATS` where `illNUB`= '$illNUB'";
+    $sqlget = "SELECT LenderPrivate,responderNOTE,LenderStatus,BorrowerStatus FROM seal.`SENYLRC-SEAL2-STATS` where `illNUB`= '$illNUB'";
     $RequestDetails = mysqli_query($db,$sqlget);
     while ($row = mysqli_fetch_assoc($RequestDetails)) {
       $lendnote = $row["responderNOTE"];
       $lenderprivate = $row["LenderPrivate"];
       $LenderStatus = $row["LenderStatus"];
+      $borrowerstatus = $row["BorrowerStatus"];
     }
     if ( strlen($action) > 0 ){
       switch ($action) {
         case "0": #Mark unsent
           $LenderStatus = "";
+          echo "Changing status of " . $illNUB . " back to 'unsent'.";
           break;
         case "1": #Mark sent
           $LenderStatus = "Sent";
+          echo "Changing status of " . $illNUB . " to 'sent'.";
           break;
-      }
-      if ( $LenderStatus == "Sent" ) {
-        echo "Changing status of " . $illNUB . " to 'sent'.";
-      } else {
-        echo "Changing status of " . $illNUB . " to 'unsent'.";
+        case "2": #Mark arrived
+          $borrowerstatus = "Arrived";
+          echo "Changing status of " . $illNUB . " to 'arrived'.";
+          break;
+        case "3": #Mark will fill
+          $borrowerstatus = "";
+          echo "Changing status of " . $illNUB . " to 'will fill'.";
+          break;
+        case "4": #Mark returned
+          $borrowerstatus = "Returned";
+          echo "Changing status of " . $illNUB . " to 'returned'.";
+          break;
       }
     }
     echo "<form action='$target' method='post'>";
     echo "<input type='hidden' name='function' value= 'update'>";
     echo "<input type='hidden' name='illNUB' value= '$illNUB'>";
     echo "<input type='hidden' name='LenderStatus' value= '$LenderStatus'>";
+    echo "<input type='hidden' name='s' value= '$source'>";
+    echo "<input type='hidden' name='BorrowerStatus' value= '$borrowerstatus'>";
     echo "<br>Lender Public Note: (Visible to the Borrower)<br>";
     echo "<textarea name='lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
     echo "Lender Private Note: (Visible only your library's staff)<br>";

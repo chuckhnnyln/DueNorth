@@ -154,7 +154,7 @@ function buildsql($task,$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$fi
               $SQLMIDDLE = "`BorrowerStatus`= 'Arrived' ";
             }
           }
-          $returnsql = $SQLBASE . $SQL_DAYS . " AND (" . $SQLMIDDLE . ")" . $SQLEND;
+          $returnsql = $SQLBASE . $SQL_DAYS . " AND `BorrowerStatus`!='Returned' AND (" . $SQLMIDDLE . ")" . $SQLEND;
           break; #Open
         case 2: #Complete
           if ($filter_no == "yes") $SQLMIDDLE = "`fill`= 0 ";
