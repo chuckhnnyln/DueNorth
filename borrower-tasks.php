@@ -58,6 +58,7 @@ if ($pagemode == 0) { #Open
   echo "<input type='checkbox' name='filter_sent' value='yes' " . checked($filter_sent) . ">Arrived  ";
 }
 if ($pagemode == 2) { #Complete
+  echo "<input type='checkbox' name='filter_no' value='yes' " . checked($filter_no) . ">No Fill  ";
   echo "<input type='checkbox' name='filter_expire' value='yes' " . checked($filter_expire) . ">Expired  ";
   echo "<input type='checkbox' name='filter_cancel' value='yes' " . checked($filter_cancel) . ">Canceled  ";
   echo "<input type='checkbox' name='filter_sent' value='yes' " . checked($filter_sent) . ">Returned  ";
@@ -78,7 +79,7 @@ echo "</p>";
 echo "</form>";
 
 $getsql = buildsql("borrow",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$filter_cancel,$filter_days,$filter_sent,$filter_noans,$sealSTAT);
-echo "<br>" . $getsql;
+#echo "<br>" . $getsql;
 
 $Getlist = mysqli_query($db,$getsql);
 $GetListCount = mysqli_num_rows ($Getlist);
@@ -140,7 +141,7 @@ if ( $GetListCount > 0 ) {
         break;
       case "No Fill":
         #Action: Edit public note
-        echo "<TD><a href='/modify-status?illNUB=$illNUB&s=borrow'>Edit Notes</a></TD></TR> ";
+        echo "<TD><a href='/modify-status?illNUB=$illNUB&s=borrow'>Edit Notes</a><br><a href='https://duenorth.indexdata.com/search.html?query=ti%3D%22" . $title . "%22'>Search Again</a></TD></TR> ";
         break;
       case "No Answer":
         #Actions: Cancel request
@@ -148,11 +149,11 @@ if ( $GetListCount > 0 ) {
         break;
       case "Expired":
         #Actions: None
-        echo "<TD>&nbsp</TD></TR> ";
+        echo "<TD><a href='https://duenorth.indexdata.com/search.html?query=ti%3D%22" . $title . "%22'>Search Again</a></TD></TR> ";
         break;
       case "Canceled":
         #Actions None
-        echo "<TD><a href='/modify-status?illNUB=$illNUB&s=borrow'>Edit Notes</a></TD></TR> ";
+        echo "<TD><a href='/modify-status?illNUB=$illNUB&s=borrow'>Edit Notes</a><br><a href='https://duenorth.indexdata.com/search.html?query=ti%3D%22" . $title . "%22'>Search Again</a></TD></TR> ";
         break;
       case "Arrived":
         #Actions: mark returned, edit notes
