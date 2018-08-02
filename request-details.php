@@ -35,6 +35,7 @@ if ( strlen($illNUB) > 2 ){
     $callnum = $row["Call Number"];
     $location = $row["Location"];
     $availability = $row["Available"];
+    $borrowerprivate = $row["BorrowerPrivate"];
     $article = $row["article"];
     $destloc = $row["Destination"];
     $destsystem = $row["DestSystem"];
@@ -114,6 +115,7 @@ if ( strlen($illNUB) > 2 ){
   echo "</td></tr>";
   echo "<tr><td valign='top'>";
   echo "<br>Public Note: " . $reqnote;
+  if (strcasecmp($userloc, $reqloc) == 0 ) {echo "<br>Private Note: " . $borrowerprivate;}
   echo "</td>";
   echo "<td valign='top'>";
   echo "<br>Public Note: " . $lendnote;

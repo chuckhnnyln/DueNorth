@@ -43,6 +43,15 @@ if (isset($_GET['loc'])) {
   #$filter_illnum="";
 } else {
   $loc = $_REQUEST['loc'];
+  #Quick-look into the database to see if this library has any new requests. If so pagemode new!
+  $quicklook = "SELECT * FROM seal.`SENYLRC-SEAL2-STATS` where Fill='3' and Destination='$loc'";
+  $results = mysqli_query($db,$quicklook);
+  $quicklookresults = mysqli_num_rows ($results);
+  if ($quicklookresults > 0 ) {
+    $hasnew = 1;
+  } else {
+    $hasnew = 0;
+  }
   $pagemode = (isset($_REQUEST['pagemode']) ? $_REQUEST['pagemode'] : "0");
   $filter_yes = (isset($_REQUEST['filter_yes']) ? $_REQUEST['filter_yes'] : "");
   $filter_no = (isset($_REQUEST['filter_no']) ? $_REQUEST['filter_no'] : "");
@@ -78,9 +87,7 @@ if ($pagemode != 1) {
   echo "<option value='all' " . selected("all",$filter_days) . ">all days</option>";
   echo "</select> ";
   echo "<a href='$target?loc=$loc&pagemode=$pagemode'>clear</a>  ";
-  echo "<input type=Submit value=Update><br>";
-  #echo "ILL # <input name='filter_illnum' type='text' value='$filter_illnum'>  ";
-  #echo "Destination <input name='filter_destination' type='text' value='$filter_destination'>";
+  echo "<input type=Submit value=Update>";
   echo "</p>";
   echo "</form>";
 }
@@ -91,12 +98,13 @@ $getsql = buildsql("lend",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$
 $Getlist = mysqli_query($db,$getsql);
 $GetListCount = mysqli_num_rows ($Getlist);
 if ( $GetListCount > 0 ) {
-  echo "<br>$GetListCount results<br>";
+  echo "$GetListCount results<br>";
   echo "<table><TR><TH width='5%'>ILL #</TH><TH>&nbsp</TH><TH width='25%'>Title / Author</TH><TH>Need By</TH><TH>Borrower & Contact</TH><TH>Timestamp</TH><TH>Status</TH><TH width=10%>Actions</TH></TR>";
   $rowtype=1;
   while ($row = mysqli_fetch_assoc($Getlist)) {
     $illNUB = $row["illNUB"];
     $title = $row["Title"];
+    $title = trim($title);
     $author = $row["Author"];
     $reqnote = $row["reqnote"];
     $lendnote = $row["responderNOTE"];
@@ -139,36 +147,37 @@ if ( $GetListCount > 0 ) {
       $rowclass="even";
     }
     #$displaynotes=build_notes($reqnote,$lendnote);
+    echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB' target='_blank'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1' target='_blank'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD>";
     switch ($fill) {
       case "Unsent":
         #Actions: Change response, edit public note
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='/modify-status?illNUB=$illNUB&a=1'>Mark Sent</a><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>Answer No</a></TD></TR> ";
+        echo "<TD><a href='/modify-status?illNUB=$illNUB&a=1'>Mark Sent</a><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>Answer No</a></TD></TR> ";
         break;
       case "No Fill":
         #Action: Edit public note
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='/modify-status?illNUB=$illNUB'>Edit Notes</a></TD></TR> ";
+        echo "<TD><a href='/modify-status?illNUB=$illNUB'>Edit Notes</a></TD></TR> ";
         break;
       case "Waiting":
         #Actions: Respond yes, respond no
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=1'>Yes</a><br><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>No</a></TD></TR> ";
+        echo "<TD><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=1'>Yes</a><br><br><a href='https://duenorth.nnyln.org/respond?num=$illNUB&a=0'>No</a></TD></TR> ";
         break;
       case "Sent":
         #Actions: Reopen
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD><a href='/modify-status?illNUB=$illNUB&a=0'>Mark Unsent</a><br><a href='/modify-status?illNUB=$illNUB'>Edit Notes</a></TD></TR> ";
+        echo "<TD><a href='/modify-status?illNUB=$illNUB&a=0'>Mark Unsent</a><br><a href='/modify-status?illNUB=$illNUB'>Edit Notes</a></TD></TR> ";
         break;
       case "Expired":
         #Actions: None
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
+        echo "<TD>&nbsp</TD></TR> ";
         break;
       case "Canceled":
         #Actions None
-        echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD><TD>&nbsp</TD></TR> ";
+        echo "<TD>&nbsp</TD></TR> ";
         break;
     }
     $rowtype = $rowtype + 1;
   }
   echo "</table>";
 } else {
-  echo "<br>Nothing to see here! Move along!";
+  echo "Nothing to see here! Move along!";
 }
 ?>

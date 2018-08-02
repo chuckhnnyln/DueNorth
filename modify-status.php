@@ -25,9 +25,18 @@ if ( isset($_REQUEST['function']) ) {
   $lenderprivate = (isset($_REQUEST['lenderprivate']) ? $lenderprivate = $_REQUEST['lenderprivate'] : $lenderprivate = "");
   $source = (isset($_REQUEST['s']) ? $source = $_REQUEST['s'] : $source = "");
   $borrowerstatus = (isset($_REQUEST['BorrowerStatus']) ? $borrowerstatus = $_REQUEST['BorrowerStatus'] : $borrowerstatus = "");
+  $reqnote = (isset($_REQUEST['reqnote']) ? $reqnote = $_REQUEST['reqnote'] : $reqnote = "");
+  $borrowerprivate = (isset($_REQUEST['borrowerprivate']) ? $borrowerprivate = $_REQUEST['borrowerprivate'] : $borrowerprivate = "");
   $lendnote = mysqli_real_escape_string($db,$lendnote);
   $lenderprivate = mysqli_real_escape_string($db,$lenderprivate);
-  $sqlupdate = "UPDATE seal.`SENYLRC-SEAL2-STATS` SET LenderPrivate = '$lenderprivate', responderNOTE = '$lendnote', LenderStatus = '$LenderStatus', BorrowerStatus = '$borrowerstatus' where `illNUB`= '$illNUB'";
+  $reqnote = mysqli_real_escape_string($db,$reqnote);
+  $borrowerprivate = mysqli_real_escape_string($db,$borrowerprivate);
+  if ( $source == "" ) {
+    $sqlupdate = "UPDATE seal.`SENYLRC-SEAL2-STATS` SET LenderPrivate = '$lenderprivate', LenderStatus = '$LenderStatus', responderNOTE = '$lendnote' where `illNUB`= '$illNUB'";
+  } else {
+    $sqlupdate = "UPDATE seal.`SENYLRC-SEAL2-STATS` SET BorrowerPrivate = '$borrowerprivate', BorrowerStatus = '$borrowerstatus', reqnote = '$reqnote' where `illNUB`= '$illNUB'";
+  }
+
   if (mysqli_query($db, $sqlupdate)) {
     if ($source == "borrow") {
       echo "<script type='text/javascript'>location.replace('/borrower-tasks?loc=" . $userloc . "&pagemode=0');</script>";
@@ -45,13 +54,15 @@ if ( isset($_REQUEST['function']) ) {
   $source = (isset($_GET['s']) ? $_GET['s'] : "");
 
   if ( strlen($illNUB) > 2 ){
-    $sqlget = "SELECT LenderPrivate,responderNOTE,LenderStatus,BorrowerStatus FROM seal.`SENYLRC-SEAL2-STATS` where `illNUB`= '$illNUB'";
+    $sqlget = "SELECT LenderPrivate,responderNOTE,LenderStatus,BorrowerStatus,reqnote,BorrowerPrivate FROM seal.`SENYLRC-SEAL2-STATS` where `illNUB`= '$illNUB'";
     $RequestDetails = mysqli_query($db,$sqlget);
     while ($row = mysqli_fetch_assoc($RequestDetails)) {
       $lendnote = $row["responderNOTE"];
       $lenderprivate = $row["LenderPrivate"];
       $LenderStatus = $row["LenderStatus"];
       $borrowerstatus = $row["BorrowerStatus"];
+      $reqnote = $row["reqnote"];
+      $borrowerprivate = $row["BorrowerPrivate"];
     }
     if ( strlen($action) > 0 ){
       switch ($action) {
@@ -80,13 +91,23 @@ if ( isset($_REQUEST['function']) ) {
     echo "<form action='$target' method='post'>";
     echo "<input type='hidden' name='function' value= 'update'>";
     echo "<input type='hidden' name='illNUB' value= '$illNUB'>";
-    echo "<input type='hidden' name='LenderStatus' value= '$LenderStatus'>";
     echo "<input type='hidden' name='s' value= '$source'>";
-    echo "<input type='hidden' name='BorrowerStatus' value= '$borrowerstatus'>";
-    echo "<br>Lender Public Note: (Visible to the Borrower)<br>";
-    echo "<textarea name='lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
-    echo "Lender Private Note: (Visible only your library's staff)<br>";
-    echo "<textarea name='lenderprivate' rows='4' cols='50'>$lenderprivate</textarea><br>";
+    switch ($source){
+      case "": #Lender as source
+        echo "<input type='hidden' name='LenderStatus' value= '$LenderStatus'>";
+        echo "<br>Lender Public Note: (Visible to the Borrower)<br>";
+        echo "<textarea name='lendnote' rows='4' cols='50'>$lendnote</textarea><br>";
+        echo "Lender Private Note: (Visible only your library's staff)<br>";
+        echo "<textarea name='lenderprivate' rows='4' cols='50'>$lenderprivate</textarea><br>";
+        break;
+      case "borrow": #borrow as source
+        echo "<input type='hidden' name='BorrowerStatus' value= '$borrowerstatus'>";
+        echo "<br>Borrower Public Note: (Visible to the Lender)<br>";
+        echo "<textarea name='reqnote' rows='4' cols='50'>$reqnote</textarea><br>";
+        echo "Borrower Private Note: (Visible only your library's staff)<br>";
+        echo "<textarea name='borrowerprivate' rows='4' cols='50'>$borrowerprivate</textarea><br>";
+        break;
+    }
     echo "<input type='submit' value='Submit'>";
     echo "</form>";
   } else {

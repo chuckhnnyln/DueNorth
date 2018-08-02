@@ -32,7 +32,6 @@ function selected($days,$filter_value) {
 function displaymodenav($task,$pagemode,$loc,$target,$hasnew) {
   $imagepath = "/sites/duenorth.nnyln.org/files/interface/";
   if ($task == "lend") {
-    echo "<br>";
     switch ($pagemode) {
       case 0: #Open
         if ($hasnew == "1") {
@@ -42,11 +41,13 @@ function displaymodenav($task,$pagemode,$loc,$target,$hasnew) {
         }
         echo "<img src='" . $imagepath . "tasks_open_active.png'> ";
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'><img src='" . $imagepath . "tasks_complete_inactive.png'></a> ";
+        echo "<br>";
         break;
       case 1: #New
         echo "<img src='" . $imagepath . "tasks_new_active.png'> ";
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'><img src='" . $imagepath . "tasks_open_inactive.png'></a> ";
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=2'><img src='" . $imagepath . "tasks_complete_inactive.png'></a> ";
+        echo "<br>";
         break;
       case 2: #Complete
         if ($hasnew == "1") {
@@ -56,6 +57,7 @@ function displaymodenav($task,$pagemode,$loc,$target,$hasnew) {
         }
         echo "<a href='" . $target . "?loc=" . $loc . "&pagemode=0'><img src='" . $imagepath . "tasks_open_inactive.png'></a> ";
         echo "<img src='" . $imagepath . "tasks_complete_active.png'> ";
+        echo "<br>";
         break;
     }
   } else {
