@@ -18,7 +18,7 @@ if($user->uid) {    // Get field value;
   $arraydays = field_get_items('user', $user_fields, 'field_filter_days');
   $item = array_shift($arraydays);
   $filter_days = $item['value'];
-  if ( $filter_days == "" ) { $filter_days = 30; } else { $filter_days = trim($filter_days); }
+  if ( $filter_days == "" ) { $filter_days = "all"; } else { $filter_days = trim($filter_days); }
 }
 
 if (isset($_GET['loc'])) {

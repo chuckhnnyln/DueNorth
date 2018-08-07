@@ -141,6 +141,7 @@ function buildsql($task,$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$fi
       $SQLBASE="SELECT *, DATE_FORMAT(`Timestamp`, '%Y/%m/%d') FROM `$sealSTAT` WHERE `$subject` = '$loc' ";
       switch ($pagemode) {
         case 0: #Open
+          $SQLBASE="SELECT *, DATE_FORMAT(`Timestamp`, '%Y/%m/%d') FROM `$sealSTAT` WHERE NOT (`BorrowerStatus` <=> 'Returned') AND `$subject` = '$loc' ";
           if ($filter_yes == "yes") $SQLMIDDLE = "`fill`= 1 ";
           if ($filter_noans == "yes") {
             if (strlen($SQLMIDDLE) > 2 ) {
@@ -156,7 +157,7 @@ function buildsql($task,$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$fi
               $SQLMIDDLE = "`BorrowerStatus`= 'Arrived' ";
             }
           }
-          $returnsql = $SQLBASE . $SQL_DAYS . " AND `BorrowerStatus`!='Returned' AND (" . $SQLMIDDLE . ")" . $SQLEND;
+          $returnsql = $SQLBASE . $SQL_DAYS . " AND (" . $SQLMIDDLE . ")" . $SQLEND;
           break; #Open
         case 2: #Complete
           if ($filter_no == "yes") $SQLMIDDLE = "`fill`= 0 ";
