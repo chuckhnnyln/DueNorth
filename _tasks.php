@@ -90,7 +90,7 @@ function buildsql($task,$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$fi
       $SQLBASE="SELECT *, DATE_FORMAT(`Timestamp`, '%Y/%m/%d') FROM `$sealSTAT` WHERE `$subject` = '$loc' ";
       switch ($pagemode) {
         case 0: #Open
-          $returnsql = $SQLBASE . $SQL_DAYS . "AND `fill` = 1  AND `LenderStatus` = '' ". $SQLEND;
+          $returnsql = $SQLBASE . $SQL_DAYS . "AND `fill` = 1  AND `LenderStatus` = '' OR `LenderStatus` IS NULL ". $SQLEND;
           break; #Open
         case 1: #New
           $returnsql = $SQLBASE . "and `Fill` = 3" . $SQLEND;

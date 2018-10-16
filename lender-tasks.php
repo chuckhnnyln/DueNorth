@@ -93,7 +93,7 @@ if ($pagemode != 1) {
 }
 
 $getsql = buildsql("lend",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$filter_cancel,$filter_days,$filter_sent,$filter_noans,$sealSTAT);
-#echo "<br>" . $getsql;
+echo "<br>Diagnostic Info (please ignore): " . $getsql;
 
 $Getlist = mysqli_query($db,$getsql);
 $GetListCount = mysqli_num_rows ($Getlist);
