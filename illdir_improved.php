@@ -1,6 +1,18 @@
 <?php
 ##illdir
 
+function systemid($input) {
+  if($input=="CVES") $system="Champlain Valley Education Services School Library System";
+  if($input=="CEFL") $system="Clinton Essex Franklin Library System";
+  if($input=="FEH") $system="Franklin-Essex-Hamilton School Library System";
+  if($input=="JLHO") $system="Jefferson-Lewis School Library System";
+  if($input=="NCLS") $system="North Country Library System";
+  if($input=="NNYLN") $system="Northern New York Library Network";
+  if($input=="OSW") $system="Oswego County School Library System at CiTi";
+  if($input=="SLL") $system="St. Lawrence-Lewis School Library System";
+  return $system;
+}
+
 function selected($input,$filter_value) {
   if ($input == $filter_value) {
     $filterout = "selected";
@@ -11,7 +23,7 @@ function selected($input,$filter_value) {
 }
 
 $resultsper = 50;
-$target = "testing";
+$target = "illdir";
 
 #Connect to database
 require '../seal_script/seal_db.inc';
@@ -109,6 +121,7 @@ while ($row = mysqli_fetch_assoc($retlimited)) {
   $loc = $row["loc"];
   $libsuspend = $row["suspend"];
   $system = $row["system"];
+  $systemname = systemid($system);
   $book = $row["book"];
   $journal = $row["journal"];
   $av = $row["av"];
@@ -146,6 +159,7 @@ while ($row = mysqli_fetch_assoc($retlimited)) {
           echo "OCLC Symbol: <strong> $oclc</strong><br>";
     }
     echo "ILL Code: <strong> $loc</strong><br>";
+    echo "System: <strong>$systemname</strong><br>";
     echo "Accepting Requests: <strong> $libsuspend </strong>";
     echo "<br><br>";
     echo "<button onclick='showHide($count)'>Show loaning options</button>";
@@ -157,7 +171,8 @@ while ($row = mysqli_fetch_assoc($retlimited)) {
     echo "Loaning E-Books: <strong>$ebook</strong><br><br>";
     echo "</span>";
   } else {
-    echo "DueNorth non-participant<br><br><br><br><br><br>";
+    echo "System: <strong>$systemname</strong><br>";
+    echo "DueNorth non-participant<br><br><br><br><br>";
   }
   echo "</td>";
   if ($count++ % 2 == 0){
