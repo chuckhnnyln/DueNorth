@@ -66,6 +66,9 @@ function find_catalog($location){
     case "Clarkson University Library":
       return "Worldcat";
       break;
+    case "Fort Drum McEwen Library":
+      return "Millennium";
+      break;
   }
 }
 
@@ -138,6 +141,9 @@ function normalize_availability($itemavail) {
       return 1;
       break;
     case "Available":
+      return 1;
+      break;
+    case "CheckedIn":
       return 1;
       break;
     default:
@@ -269,14 +275,13 @@ foreach ($records->location as $location) { #Locations loop start
   $mdid = $location->{'md-id'};
   foreach ($location->holdings->holding as $holding) { #generic holding loop start
     $itemavail=$holding->localAvailability;
+    if ($catalogtype == "OPALS") {$itemavail=$itemavail>0?$itemavail="-":$itemavail="0";} #OPALS might return (-1 through +X)
     $itemavail=normalize_availability($itemavail); #0=No, 1=Yes
     $itemavailtext=set_availability($itemavail);
-    if ( ($catalogtype == "Horizon") || ($catalogtype == "OPALS") ) $itemavailtext="UNKNOWN"; #Availability not possible on these systems.
-    if ( ($catalogtype == "Horizon") || ($catalogtype == "OPALS") ) $itemavail=1; #Availability not possible on these systems.
     $itemcallnum=$holding->callNumber;
     $itemcallnum=htmlspecialchars($itemcallnum,ENT_QUOTES); #Sanitizes callnumbers with special characters in them
     $itemlocation=$holding->localLocation; #Gets the alias
-    if ($catalogtype == "Worldcat") $itemlocation=$location;
+    if ($catalogtype == "Worldcat" || $catalogtype == "Millennium") $itemlocation=$location['name'];
     $locationinfo=find_locationinfo($itemlocation);
     $itemlocation=htmlspecialchars($itemlocation,ENT_QUOTES); #Sanitizes locations with special characters in them
     $destill=$locationinfo[0]; #Destination ILL Code

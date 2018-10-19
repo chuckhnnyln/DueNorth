@@ -116,9 +116,11 @@ if (strcmp($libsystem,'CVES')==0){
     $libsystemtxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($libsystem,'SLL')==0){
     $libsystemtxt = "St. Lawrence-Lewis School Library System";
+}else if (strcmp($libsystem,'JLHO')==0){
+    $libsystemtxt = "Jefferson-Lewis School Library System";
 }else{
    $libsystemtxt = "Northern New York Library Network";
-   }
+}
 
     #Stats overall in the time frame chosen
     echo "<h1>DueNorth Stats from $startdated to $enddated </h1>";
@@ -160,6 +162,8 @@ if (strcmp($dessysvar,'CVES')==0){
     $dessysvartxt = "Oswego County School Library System at CiTi";
 }else if (strcmp($dessysvar,'SLL')==0){
     $dessysvartxt = "St. Lawrence-Lewis School Library System";
+}else if (strcmp($dessysvar,'JLHO')==0){
+    $dessysvartxt = "Jefferson-Lewis School Library System";
 }else{
    $dessysvartxt = "Northern New York Library Network";
    }
@@ -331,7 +335,7 @@ if (strcmp($dessysvar,'CVES')==0){
      End Date:
      <input id="datepicker2" name="enddate"/>
      <br><br>Requesting Library System: <select name="system">
-    <option value="">All</option>
+     <option value="">All</option>
     <option value = "CVES">Champlain Valley Education Services School Library System</option>
     <option value = "CEFL">Clinton Essex Franklin Library System</option>
     <option value = "FEH">Franklin-Essex-Hamilton School Library System</option>
