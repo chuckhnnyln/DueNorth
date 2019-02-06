@@ -39,7 +39,7 @@ function find_catalog($location){
     case "Paul Smith's College":
       return "SirsiDynix";
       break;
-    case "North Country Library System":
+    case "NCLS":
       return "SirsiDynix";
       break;
     case "CEF Library System":
@@ -148,6 +148,145 @@ function normalize_availability($itemavail) {
       break;
     default:
       return 0;
+  }
+}
+
+function normalize_availability_NCLS($itemavail) {
+  #NCLS has lots of availability statuses, so this fails just the un-loanable ones.
+  $itemavail = str_replace (" ","", $itemavail);
+  $itemavail = str_replace ("\n","", $itemavail);
+  if (strpos($itemavail, '/') !== false) {
+    $itemavail = "DATED";
+  }
+  switch ($itemavail) {
+    case "DATED":
+      return 0;
+      break;
+    case "ADULT-HOM":
+      return 0;
+      break;
+    case "BHM-LOAN":
+      return 0;
+      break;
+    case "BIKEMOBILE":
+      return 0;
+      break;
+    case "BRO-LOAN":
+      return 0;
+      break;
+    case "BVF-LOAN":
+      return 0;
+      break;
+    case "CATALOGING":
+      return 0;
+      break;
+    case "CHECKEDOUT":
+      return 0;
+      break;
+    case "CCF-LOAN":
+      return 0;
+      break;
+    case "DAMAGED":
+      return 0;
+      break;
+    case "DISCARD":
+      return 0;
+      break;
+    case "EDW-LOAN":
+      return 0;
+      break;
+    case "ELL-LOAN":
+      return 0;
+      break;
+    case "GCF-LOAN":
+      return 0;
+      break;
+    case "HOLDS":
+      return 0;
+      break;
+    case "HOP-LOAN":
+      return 0;
+      break;
+    case "ILL":
+      return 0;
+      break;
+    case "INPROCESS":
+      return 0;
+      break;
+    case "INSHIPPING":
+      return 0;
+      break;
+    case "INTERNET":
+      return 0;
+      break;
+    case "INTRANSIT":
+      return 0;
+      break;
+    case "JLBOCES":
+      return 0;
+      break;
+    case "LAF-LOAN":
+      return 0;
+      break;
+    case "LONGOVRDUE":
+      return 0;
+      break;
+    case "LOST":
+      return 0;
+      break;
+    case "LOST-ASSUM":
+      return 0;
+      break;
+    case "LOST-CLAIM":
+      return 0;
+      break;
+    case "MISSING":
+      return 0;
+      break;
+    case "OSC-LOAN":
+      return 0;
+      break;
+    case "OSWBOCES":
+      return 0;
+      break;
+    case "OTHER-LOAN":
+      return 0;
+      break;
+    case "PROCESSING":
+      return 0;
+      break;
+    case "RCF-LOAN":
+      return 0;
+      break;
+    case "REPAIR":
+      return 0;
+      break;
+    case "RIC-LOAN":
+      return 0;
+      break;
+    case "RIVRVIEWCF":
+      return 0;
+      break;
+    case "ROD-LOAN":
+      return 0;
+      break;
+    case "SPECIALNH":
+      return 0;
+      break;
+    case "STAFFONLY":
+      return 0;
+      break;
+    case "STLBOCES":
+      return 0;
+      break;
+    case "WCF-LOAN":
+      return 0;
+      break;
+    case "WLY-LOAN":
+      return 0;
+      break;
+    default:
+      return 1;
   }
 }
 
@@ -276,7 +415,11 @@ foreach ($records->location as $location) { #Locations loop start
   foreach ($location->holdings->holding as $holding) { #generic holding loop start
     $itemavail=$holding->localAvailability;
     if ($catalogtype == "OPALS") {$itemavail=$itemavail>0?$itemavail="-":$itemavail="0";} #OPALS might return (-1 through +X)
-    $itemavail=normalize_availability($itemavail); #0=No, 1=Yes
+    if ($location['name'] == "NCLS") {
+      $itemavail=normalize_availability_NCLS($itemavail);
+    } else {
+      $itemavail=normalize_availability($itemavail); #0=No, 1=Yes
+    }
     $itemavailtext=set_availability($itemavail);
     $itemcallnum=$holding->callNumber;
     $itemcallnum=htmlspecialchars($itemcallnum,ENT_QUOTES); #Sanitizes callnumbers with special characters in them
