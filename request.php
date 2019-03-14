@@ -408,6 +408,7 @@ echo "<p>This is a request for: <br>";
 echo "<input type='radio' name='singlemulti' id='singleCheck' checked='checked' onclick='javascript:multiRequest();'> a single copy <input type='radio' name='singlemulti' id='multiCheck' onclick='javascript:multiRequest();'> multiple copies<br><p>";
 
 $loccount='0'; #Counts available locations
+$deadlibraries = array(); #Initializes the array which keeps the unavailable libraries.
 foreach ($records->location as $location) { #Locations loop start
   $catalogtype = find_catalog($location['name']);
   $urlrecipe = $location->{'md-url_recipe'};
@@ -451,27 +452,57 @@ foreach ($records->location as $location) { #Locations loop start
     echo "destlibsystem: $destlibsystem \n";
     echo "destlibname: $destlibname \n";
     echo "desttypeloan: $desttypeloan (1)\n";
+    echo "failmessage: $failmessage\n";
     echo "--> \n\n";
 
     $destfail=0; #0=No, 1=Yes
-    if ( $itemavail == 0 ) $destfail = 1;
-    if ( $destpart == 0 ) $destfail = 1;
-    if ( strlen($destemail) < 2 ) $destfail = 1;
-    if ( $destsuspend == 1 ) $destfail = 1;
-    if ( $desttypeloan == 0 ) $destfail = 1;
-    if ( ($destlibsystem == $field_home_library_system[0]['value']) && ($field_filter_own_system[0]['value'] == 1) ) $destfail = 1;
-
+    if ( $itemavail == 0 ) {
+      $destfail = 1;
+      $failmessage = "Material unavailable, see source ILS/LMS for details";
+    }
+    if ( $destpart == 0 ) {
+      $destfail = 1;
+      $failmessage = "Library not particpating in DueNorth";
+    }
+    if ( strlen($destemail) < 2 ) {
+      $destfail = 1;
+      $failmessage = "Library has no ILL email configured";
+    }
+    if ( $destsuspend == 1 ) {
+      $destfail = 1;
+      $failmessage = "Library not loaning / closed";
+    }
+    if ( $desttypeloan == 0 ) {
+      $destfail = 1;
+      $failmessage = "Library not loaning this material type";
+    }
+    if ( ($destlibsystem == $field_home_library_system[0]['value']) && ($field_filter_own_system[0]['value'] == 1) ) {
+      $destfail = 1;
+      $failmessage = "Library a member of your system, please request through your ILS/LMS";
+    }
+    if ( $destill == "" ) {
+      $destfail = 1;
+      $destlibname = $itemlocation;
+      $destlibsystem = "Unknown";
+      $failmessage = "No alias match in DueNorth directory";
+    }
     if ( $destfail == 0 ) {
       $itemcallnum= preg_replace('/[:]/', ' ' , $itemcallnum);
+      $itemlocation= preg_replace('/[:]/', ' ' , $itemlocation);
+      $itemlocallocation= preg_replace('/[:]/', ' ' , $itemlocallocation);
       echo"<div class='multiplereq'><input type='checkbox' class='librarycheck' name='destination[]' value='". $itemlocation .":".$destlibname.":".$destlibsystem.":".$itemavailtext.":".$itemcallnum.":".$itemlocallocation.":".$destemail.":".$destill."'><strong>".$destlibname."</strong> (".$destlibsystem."), Availability: $itemavailtext, Call Number:$itemcallnum  </br></div>";
       echo"<div class='singlereq'><input type='radio' class='librarycheck' name='destination[]' value='". $itemlocation .":".$destlibname.":".$destlibsystem.":".$itemavailtext.":".$itemcallnum.":".$itemlocallocation.":".$destemail.":".$destill."'><strong>".$destlibname."</strong> (".$destlibsystem."), Availability: $itemavailtext, Call Number:$itemcallnum  </br></div>";
       $loccount=$loccount+1;
     } else {
+      $deadlibraries[] = "<div class='grayout'>$destlibname ($destlibsystem), $failmessage</div>";
       echo "<!-- Holding location failed checks. --> \n";
     }
   } #Generic holding loop end
   } #End generic handler
 echo "</select>";
+foreach ($deadlibraries as $line) {
+  echo $line;
+}
 if ($loccount > 0) {
   echo "<br><input type=Submit value=Submit> ";
   #If we have no locations don't show submit and display error
