@@ -77,7 +77,6 @@ echo "</p>";
 echo "</form>";
 
 $getsql = buildsql("borrow",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$filter_cancel,$filter_days,$filter_sent,$filter_noans,$sealSTAT);
-#echo "<br>" . $getsql;
 
 $Getlist = mysqli_query($db,$getsql);
 $GetListCount = mysqli_num_rows ($Getlist);
@@ -166,6 +165,10 @@ if ( $GetListCount > 0 ) {
     $rowtype = $rowtype + 1;
   }
   echo "</table>";
+
+  #echo "<br>Diagnostic Info:"
+  #echo "<br>" . $getsql;
+
 } else {
   echo "Nothing to see here! Move along!";
 }
