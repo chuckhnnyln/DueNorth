@@ -169,7 +169,7 @@ if (mysqli_query($db, $sql)) {
   $fname $lname<br>
   $email<br>
   $wphone<br><br>
-  Will you fill this request?  <a href='https://duenorth.nnyln.org/respond?num=$illnum&a=1' >Yes</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href='https://duenorth.nnyln.org/respond?num=$illnum&a=0' >No</a><br>";
+  Please visit your <a href='https://duenorth.nnyln.org/lender-tasks?loc=$destloc&pagemode=1'>DueNorth Lender Tasks</a> screen to respond.</br>";
 
   #Set email subject for request
   $subject = "NEW ILL Request from $inst ILL# $illnum";

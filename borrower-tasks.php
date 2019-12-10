@@ -105,6 +105,9 @@ if ( $GetListCount > 0 ) {
     if($fill=="4") $fill="Expired";
     if($fill=="6") $fill="Canceled";
     $borrowerstatus = $row["BorrowerStatus"];
+    $lenderstatus = $row["LenderStatus"];
+    $lenderstatus = "($lenderstatus)";
+    if($lenderstatus=="()") $lenderstatus="";
     if($fill=="Will Fill" && $borrowerstatus=="Arrived") $fill="Arrived";
     if($fill=="Will Fill" && $borrowerstatus=="Returned") $fill="Returned";
     $dest=trim($dest);
@@ -131,7 +134,7 @@ if ( $GetListCount > 0 ) {
       $rowclass="even";
     }
     #$displaynotes=build_notes($reqnote,$lendnote);
-    echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB' target='_blank'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1' target='_blank'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' alt='Print Pull Slip' title='Print Pull Slip' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD></br><a href='mailto:$destemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$dest</a></TD><TD>$timestamp</TD><TD>$fill</TD>";
+    echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB' target='_blank'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1' target='_blank'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' alt='Print Pull Slip' title='Print Pull Slip' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD></br><a href='mailto:$destemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$dest</a></TD><TD>$timestamp</TD><TD>$fill<br>$lenderstatus</TD>";
     switch ($fill) {
       case "Will Fill":
         #Actions: mark arrived, edit public note
