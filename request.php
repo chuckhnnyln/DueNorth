@@ -98,7 +98,7 @@ function check_itemtype ($destill,$itemtype) {
         return 1;
       }
     }
-    if ( (strcmp($itemtype, 'journal') == 0) || (strcmp($itemtype, 'journal (electronic)') == 0) ) {
+    if ( (strcmp($itemtype, 'journal') == 0) || (strcmp($itemtype, 'journal (electronic)') == 0) || (strcmp($itemtype, 'newspaper') == 0) ) {
     #See if  request is for a journal
       if ( $row['journal']==1   ) {
       #Checking if journal is allowed
@@ -348,7 +348,10 @@ echo "<input type='hidden' name='wphone' value= ' ".$field_work_phone[0]['value'
 echo "<input type='hidden' name='reqLOCcode' value= ' ".$field_loc_location_code[0]['value'] ." '>";
 echo "<h1>Request Details</h1>";
 echo "Need by date <input type='text' name='needbydate'><br><br>";
-echo "Note <input type='text' size='100' name='reqnote'><br><br>";
+echo "<br>Borrower Public Note: (Visible to the Lender)<br>";
+echo "<textarea name='reqnote' rows='2' cols='50'></textarea><br>";
+echo "Borrower Private Note: (Visible only your library's staff)<br>";
+echo "<textarea name='borrowerprivate' rows='2' cols='50'></textarea><br>";
 echo "Is this a request for an article?";
 echo "Yes <input type='radio' onclick='javascript:yesnoCheck();' name='yesno' id='yesCheck'>";
 echo "No <input type='radio' onclick='javascript:yesnoCheck();' name='yesno' id='noCheck' checked='checked'><br>";
