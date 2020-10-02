@@ -21,10 +21,13 @@ function find_catalog($location){
     case "Oswego County Schools":
       return "OPALS";
       break;
-    case "Jefferson-Lewis SLS":
+    case "Jefferson - Lewis SLS":
       return "OPALS";
       break;
-    case "St. Lawrence-Lewis SLS":
+    case "St.Lawrence - Lewis SLS":
+      return "OPALS";
+      break;
+    case "Franklin Essex Hamiliton SLS":
       return "OPALS";
       break;
     case "Franklin Essex Hamilton SLS":
@@ -410,6 +413,7 @@ echo "Please limit multiple copy requests to classroom sets or book clubs.</p>";
 echo "<p>This is a request for: <br>";
 echo "<input type='radio' name='singlemulti' id='singleCheck' checked='checked' onclick='javascript:multiRequest();'> a single copy <input type='radio' name='singlemulti' id='multiCheck' onclick='javascript:multiRequest();'> multiple copies<br><p>";
 
+$failmessage=''; #Delcaring this variable
 $loccount='0'; #Counts available locations
 $deadlibraries = array(); #Initializes the array which keeps the unavailable libraries.
 foreach ($records->location as $location) { #Locations loop start
