@@ -146,6 +146,9 @@ function normalize_availability($itemavail) {
     case "Available":
       return 1;
       break;
+    case "available":
+      return 1;
+      break;
     case "CheckedIn":
       return 1;
       break;
@@ -433,6 +436,7 @@ foreach ($records->location as $location) { #Locations loop start
     $itemcallnum=htmlspecialchars($itemcallnum,ENT_QUOTES); #Sanitizes callnumbers with special characters in them
     $itemlocation=$holding->localLocation; #Gets the alias
     if ($catalogtype == "Worldcat" || $catalogtype == "Millennium") $itemlocation=$location['name'];
+    if ($location['name'] == "SUNY Oswego") $itemlocation="Penfield Library";
     $locationinfo=find_locationinfo($itemlocation);
     $itemlocation=htmlspecialchars($itemlocation,ENT_QUOTES); #Sanitizes locations with special characters in them
     $destill=$locationinfo[0]; #Destination ILL Code
