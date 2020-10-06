@@ -49,22 +49,22 @@ function find_catalog($location){
       return "Horizon";
       break;
     case "SUNY Oswego":
-      return "Generic";
+      return "Primo";
       break;
     case "SUNY Potsdam":
-      return "Generic";
+      return "Primo";
       break;
     case "SUNY Canton":
-      return "Generic";
+      return "Primo";
       break;
     case "SUNY Plattsburgh":
-      return "Generic";
+      return "Primo";
       break;
     case "Jefferson Community College":
-      return "Generic";
+      return "Primo";
       break;
     case "North Country Community College":
-      return "Generic";
+      return "Primo";
       break;
     case "Clarkson University Library":
       return "Worldcat";
@@ -155,6 +155,12 @@ function normalize_availability($itemavail) {
     default:
       return 0;
   }
+}
+
+function primo_adjustlocation($itemlocation){
+  # Takes a string like 'Bumble Library / Upper Floor' and returns ''Bumble Library'
+  $simplelocation = substr ($itemlocation, 0, strpos($itemlocation, '/')-1);
+  return $simplelocation;
 }
 
 function normalize_availability_NCLS($itemavail) {
@@ -436,7 +442,7 @@ foreach ($records->location as $location) { #Locations loop start
     $itemcallnum=htmlspecialchars($itemcallnum,ENT_QUOTES); #Sanitizes callnumbers with special characters in them
     $itemlocation=$holding->localLocation; #Gets the alias
     if ($catalogtype == "Worldcat" || $catalogtype == "Millennium") $itemlocation=$location['name'];
-    if ($location['name'] == "SUNY Oswego") $itemlocation="Penfield Library";
+    if ($catalogtype == "Primo") $itemlocation=primo_adjustlocation($itemlocation);
     $locationinfo=find_locationinfo($itemlocation);
     $itemlocation=htmlspecialchars($itemlocation,ENT_QUOTES); #Sanitizes locations with special characters in them
     $destill=$locationinfo[0]; #Destination ILL Code
