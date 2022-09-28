@@ -437,6 +437,7 @@ foreach ($records->location as $location) { #Locations loop start
     $destlibname=htmlspecialchars($destlibname,ENT_QUOTES); #Sanitizes library names with special characters in them
     $desttypeloan=check_itemtype($destill,$itemtype); #0=No, 1=Yes
     if ( ($catalogtype == "Innovative") && ($itemlocation == "ODY Folio") ) $desttypeloan=1;
+    #if ($catalogtype == "OPALS") $desttypeloan=1;
     $itemlocallocation=$itemlocation; #Needed in sent.php
 
     echo "<!-- \n";
