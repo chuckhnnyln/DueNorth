@@ -72,8 +72,11 @@ require '../seal_script/seal_db.inc';
 $db = mysqli_connect($dbhost, $dbuser, $dbpass);
 mysqli_select_db($db,$dbname);
 
+#Shorten long titles
+$shorttitle = substr($title, 0 , 254);
+
 #Add escape for title, author, call number, Library name, and Requester Name
-$ititle = mysqli_real_escape_string($db, $title);
+$ititle = mysqli_real_escape_string($db, $shorttitle);
 $article = mysqli_real_escape_string($db, $article);
 $iauthor = mysqli_real_escape_string($db, $author);
 $pubdate = mysqli_real_escape_string($db, $pubdate);
