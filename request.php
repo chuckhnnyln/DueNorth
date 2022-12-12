@@ -30,6 +30,9 @@ function find_catalog($location){
     case "Franklin Essex Hamilton SLS":
       return "OPALS";
       break;
+    case "Franklin Essex Hamiliton SLS":
+      return "OPALS";
+      break;      
     case "Champlain Valley Educational Services SLS":
       return "OPALS";
       break;
