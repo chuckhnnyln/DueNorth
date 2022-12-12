@@ -42,7 +42,7 @@ function find_catalog($location){
     case "NCLS":
       return "SirsiDynix";
       break;
-    case "CEF Library System":
+    case "CEF Library System (enterprise)":
       return "Horizon";
       break;
     case "SUNY Oswego":
@@ -425,6 +425,10 @@ foreach ($records->location as $location) { #Locations loop start
     $itemcallnum=$holding->callNumber;
     $itemcallnum=htmlspecialchars($itemcallnum,ENT_QUOTES); #Sanitizes callnumbers with special characters in them
     $itemlocation=$holding->localLocation; #Gets the alias
+    if ($catalogtype == "Horizon") {
+      $itemlocationbreak=explode(" / ", $itemlocation);
+      $itemlocation=$itemlocationbreak[0];
+    }
     if ($catalogtype == "Worldcat" || $catalogtype == "Millennium") $itemlocation=$location['name'];
     $locationinfo=find_locationinfo($itemlocation);
     $itemlocation=htmlspecialchars($itemlocation,ENT_QUOTES); #Sanitizes locations with special characters in them
