@@ -80,6 +80,7 @@ function find_locationinfo ($locationalias) {
   require '../seal_script/seal_db.inc';
   $db = mysqli_connect($dbhost, $dbuser, $dbpass);
   mysqli_select_db($db,$dbname);
+  $locationalias=str_replace("'", "", $locationalias);
   $GETLISTSQL="SELECT loc,participant,`ILL Email`,suspend,system,Name FROM `SENYLRC-SEAL2-Library-Data` where alias = '$locationalias' ";
   $result=mysqli_query($db, $GETLISTSQL);
   $row = mysqli_fetch_row($result);
