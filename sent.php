@@ -21,6 +21,7 @@ if (isset($_REQUEST['isbn'])) $isbn = $_REQUEST['isbn'];
 if (isset($_REQUEST['issn'])) $issn = $_REQUEST['issn'];
 if (isset($_REQUEST['needbydate'])) $needbydate = $_REQUEST['needbydate'];
 if (isset($_REQUEST['reqnote'])) $reqnote = $_REQUEST['reqnote'];
+if (isset($_REQUEST['borrowerprivate'])) $borrowerprivate = $_REQUEST['borrowerprivate'];
 
 #Pull all the articles files and then combine into one variable
 if (isset($_REQUEST['arttile'])) $arttile = $_REQUEST['arttile'];
@@ -33,7 +34,8 @@ if (isset($_REQUEST['artyear'])) $artyear = $_REQUEST['artyear'];
 if (isset($_REQUEST['artcopyright'])) $artcopyright = $_REQUEST['artcopyright'];
 $article="Article Title: ". $arttile ." <br>Article Author: ". $artauthor ." <br>Volume: ". $artvolume ."<br>Issue: ". $artissue ."<br> Pages: ". $artpage ." <br>Year: ".$artyear." <br>Month:  ".$artmonth."<br>Copyright: ".$artcopyright." ";
 if (strlen($needbydate)>0)  $needbydatet="This item is needed by $needbydate";
-if (strlen($reqnote)>0)  $reqnote="Note: $reqnote";
+if (strlen($reqnote)>0)  $reqnote="Public Note: $reqnote";
+if (strlen($borrowerprivate)>0)  $borrowerprivate="Private Note: $borrowerprivate";
 if (strlen($isbn)>2)  $isbn="ISBN: $isbn";
 if (strlen($issn)>2)  $issn="ISSN: $issn";
 
@@ -93,6 +95,7 @@ $email = mysqli_real_escape_string($db, $email);
 $library = mysqli_real_escape_string($db, $library);
 $needbydate = mysqli_real_escape_string($db, $needbydate);
 $reqnote = mysqli_real_escape_string($db, $reqnote);
+$borrowerprivate = mysqli_real_escape_string($db, $borrowerprivate);
 $destloc = mysqli_real_escape_string($db, $destloc);
 $reqLOCcode = mysqli_real_escape_string($db, $reqLOCcode);
 $wphone = mysqli_real_escape_string($db, $wphone);
@@ -104,8 +107,8 @@ $reqLOCcode = trim($reqLOCcode);
 
 #The SQL statement to insert for Stats and to recall if needed in the future
 #$itemcall_s = mysql_escape_string($itemcall);
-$sql = "INSERT INTO `seal`.`SENYLRC-SEAL2-STATS` (`illNUB`,`Title`,`Author`,`pubdate`,`reqisbn`,`reqissn`,`itype`,`Call Number`,`Location`,`Available`,`article`,`needbydate`,`reqnote`,`Destination`,`DestSystem`,`Requester lib`,`Requester LOC`,`ReqSystem`,`Requester person`,`requesterEMAIL`,`Timestamp`,`Fill`,`responderNOTE`,`requesterPhone`,`saddress`,`caddress`)
-VALUES ('0','$ititle','$iauthor','$pubdate','$isbn','$issn','$itype','$itemcall','$itemlocation','$itemavail','$article','$needbydate','$reqnote','$destloc','$destsystem','$inst','$reqLOCcode','$reqsystem','$fname $lname','$email','$today','3','','$wphone','$saddress','$caddress')";
+$sql = "INSERT INTO `seal`.`SENYLRC-SEAL2-STATS` (`illNUB`,`Title`,`Author`,`pubdate`,`reqisbn`,`reqissn`,`itype`,`Call Number`,`Location`,`Available`,`article`,`needbydate`,`reqnote`,`Destination`,`DestSystem`,`Requester lib`,`Requester LOC`,`ReqSystem`,`Requester person`,`requesterEMAIL`,`Timestamp`,`Fill`,`responderNOTE`,`requesterPhone`,`saddress`,`caddress`,`BorrowerPrivate`)
+VALUES ('0','$ititle','$iauthor','$pubdate','$isbn','$issn','$itype','$itemcall','$itemlocation','$itemavail','$article','$needbydate','$reqnote','$destloc','$destsystem','$inst','$reqLOCcode','$reqsystem','$fname $lname','$email','$today','3','','$wphone','$saddress','$caddress','$borrowerprivate')";
 
 if (mysqli_query($db, $sql)) {
   #Get the SQL id and create a ILL Number
@@ -121,6 +124,7 @@ if (mysqli_query($db, $sql)) {
   #We'll set these to white space if they are empty to prevent an error message
   if ( empty($needbydatet)) $needbydatet='';
   if ( empty($reqnote)) $reqnote='';
+  if ( empty($borrowerprivate)) $borrowerprivate='';
   if ( empty($arttile)) $article='';
 
   #Copy of message sent to the requester
@@ -172,7 +176,7 @@ if (mysqli_query($db, $sql)) {
   $fname $lname<br>
   $email<br>
   $wphone<br><br>
-  Will you fill this request?  <a href='https://duenorth.nnyln.org/respond?num=$illnum&a=1' >Yes</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href='https://duenorth.nnyln.org/respond?num=$illnum&a=0' >No</a><br>";
+  Please visit your <a href='https://duenorth.nnyln.org/lender-tasks?loc=$destloc&pagemode=1'>DueNorth Lender Tasks</a> screen to respond.</br>";
 
   #Set email subject for request
   $subject = "NEW ILL Request from $inst ILL# $illnum";

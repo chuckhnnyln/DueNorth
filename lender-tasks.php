@@ -93,7 +93,7 @@ if ($pagemode != 1) {
 }
 
 $getsql = buildsql("lend",$pagemode,$loc,$filter_yes,$filter_no,$filter_expire,$filter_cancel,$filter_days,$filter_sent,$filter_noans,$sealSTAT);
-echo "<br>Diagnostic Info (please ignore): " . $getsql;
+#echo "<br>Diagnostic Info (please ignore): " . $getsql;
 
 $Getlist = mysqli_query($db,$getsql);
 $GetListCount = mysqli_num_rows ($Getlist);
@@ -123,6 +123,11 @@ if ( $GetListCount > 0 ) {
     if($fill=="6") $fill="Canceled";
     $lenderstatus = $row["LenderStatus"];
     if ( $lenderstatus == "Sent" && $fill == "Unsent" ) $fill = "Sent";
+
+    $borrowerstatus = $row["BorrowerStatus"];
+    $borrowerstatus = "($borrowerstatus)";
+    if($borrowerstatus=="()") $borrowerstatus="";
+
     $dest=trim($dest);
     #Are there comments?
     if ( (strlen($lendnote)>2) || (strlen($reqnote)>2) || (strlen($lenderprivate)>2) ) {
@@ -147,7 +152,7 @@ if ( $GetListCount > 0 ) {
       $rowclass="even";
     }
     #$displaynotes=build_notes($reqnote,$lendnote);
-    echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB' target='_blank'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1' target='_blank'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill</TD>";
+    echo "<TR class='$rowclass'><TD><a href='request-details?illNUB=$illNUB' target='_blank'>$illNUB</a></TD><TD><a href='request-details?illNUB=$illNUB&print=1' target='_blank'><img src='/sites/duenorth.nnyln.org/files/interface/print.png' width='20'></a>$comments</TD><TD>$title</br><i>$author</i></TD><TD>$needby</TD><TD>$reqp</br><a href='mailto:$reqemail?Subject=NOTE Request ILL# $illNUB' target='_blank'>$reql</a></TD><TD>$timestamp</TD><TD>$fill<br>$borrowerstatus</TD>";
     switch ($fill) {
       case "Unsent":
         #Actions: Change response, edit public note
