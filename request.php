@@ -312,6 +312,7 @@ foreach ($records->location as $location) { #Locations loop start
     }
     if ($catalogtype == "Worldcat" || $catalogtype == "Millennium") $itemlocation=$location['name'];
     if ($catalogtype == "Primo") $itemlocation=primo_adjustlocation($itemlocation);
+    if ($catalogtype == "Innovative" && $itemlocation == "Science Library") $itemlocation = "ODY Upper Level";
     $locationinfo=find_locationinfo($itemlocation);
     $itemlocation=htmlspecialchars($itemlocation,ENT_QUOTES); #Sanitizes locations with special characters in them
     $destill=$locationinfo[0]; #Destination ILL Code
