@@ -316,6 +316,7 @@ foreach ($records->location as $location) { #Locations loop start
     if ($catalogtype == "Innovative" && $itemlocation == "Science Library Serials") $itemlocation = "ODY Upper Level";
     if ($catalogtype == "Innovative" && $itemlocation == "ODY Lower Level") $itemlocation = "ODY Upper Level";
     if ($catalogtype == "Innovative" && $itemlocation == "SLU Faculty Authors") $itemlocation = "ODY Upper Level";
+    if ($itemlocation == "Fort Drum McEwen Library" && $itemtype == "") $itemtype = "book";
     $locationinfo=find_locationinfo($itemlocation);
     $itemlocation=htmlspecialchars($itemlocation,ENT_QUOTES); #Sanitizes locations with special characters in them
     $destill=$locationinfo[0]; #Destination ILL Code
